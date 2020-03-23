@@ -2,6 +2,13 @@
 #include <iostream>
 #include <climits>
 #include <string>
+#ifdef _WIN32
+const bool OS_WIN = true;
+#include <conio.h>
+#elif __linux__
+const bool OS_WIN = false;
+#include <curses.h>
+#endif
 #include <vector>
 #include <algorithm>
 #include "juego.h"
@@ -100,7 +107,7 @@ istream& operator>>(istream& movimientos, tTecla& tecla) {
 			tecla = FIN;
 			break;
 		default:
-			cout << "Error al leer {" << input << "}\n";
+			tecla = ERROR_TECLA;
 	}
 	return movimientos;
 }
@@ -193,10 +200,10 @@ void jugar(tJuego & juego, istream & entrada, istream & movimientos) {
 	tTecla input;
 	do{
 		leerMovimiento(juego, input, movimientos);
-		if(input != SALIR && input != FIN)  {
+		if(juego.estado != ABANDONO && input != FIN)  {
 			realizarMovimiento(juego, input);
 		} 
-	} while(!(input == FIN || input == SALIR || juego.estado == EXITO));
+	} while(input != FIN && juego.estado != ABANDONO && juego.estado != EXITO);
 	dibujar(juego);
 	while(input != FIN) leerMovimiento(juego, input, movimientos); // Agotar movimientos no usados
 }

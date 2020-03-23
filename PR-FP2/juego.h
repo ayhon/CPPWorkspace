@@ -4,8 +4,8 @@
 #include <iostream>
 #include "mina.h"
 using namespace std;
-enum tTecla { ARRIBA, ABAJO, DCHA, IZDA, SALIR, FIN, TNT };
-enum tEstado { EXPLORANDO, EXITO, ABANDONO, FRACASO, EXPLOTADO };
+enum tTecla { ARRIBA, ABAJO, DCHA, IZDA, SALIR, FIN, TNT, NADA, ERROR_TECLA };
+enum tEstado { EXPLORANDO, EXITO, ABANDONO, FRACASO, EXPLOTADO};
 const tCoords tdirs4[4] = { {-1,0}, {1,0}, {0, 1}, {0, -1} };
 
 struct tJuego {

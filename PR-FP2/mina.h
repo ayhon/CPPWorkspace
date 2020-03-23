@@ -5,7 +5,7 @@
 #include <vector>
 using namespace std;
 
-typedef enum {TIERRA, PIEDRA, MURO, GEMA, SALIDA, LIBRE, MINERO} tElemento;
+enum tElemento {TIERRA, PIEDRA, MURO, GEMA, SALIDA, LIBRE, MINERO, TNT, ERROR_ELEM};
 using tPlano = vector<vector<tElemento>>;
 
 struct tCoords { int x = -1, y = -1; }; // Para detectar errores
@@ -21,5 +21,6 @@ void dibujar1_1(tMina const& mina);
 void dibujar3_1(tMina const& mina);
 bool dentroPlano(tMina const& mina, int x, int y);
 bool esElemQueCae(tElemento &elem);
+void colorFondo(int color, string msg);
 
 #endif
