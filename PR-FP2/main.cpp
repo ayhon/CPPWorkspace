@@ -5,11 +5,12 @@ using namespace std;
 
 int escogerResolucion() {
     int opcion;
+    cout << "Escoge la resulución del juego\n";
     cout << "1. Jugar partida a escala 1:1\n";
     cout << "2. Jugar partida a escala 3:1\n";
     cout << "0. Salir\n";
     cout << "> "; cin >> opcion;
-    while(opcion >= 2 || opcion < 0)  {
+    while(opcion > 2 || opcion < 0)  {
         cout << "Entrada no valida. Escoge de nuevo\n"; 
         cout << "> "; cin >> opcion;
     }
@@ -21,8 +22,9 @@ int escogerDispEntrada() {
     cout << "Escoge el dispositivo de entrada\n";
     cout << "1. Usar teclado\n";
     cout << "2. Usar un fichero\n";
+    cout << "0. Salir\n";
     cout << "> "; cin >> opcion;
-    while(opcion >= 2 || opcion <= 0)  {
+    while(opcion > 2 || opcion < 0)  {
         cout << "Entrada no valida. Escoge de nuevo\n"; 
         cout << "> "; cin >> opcion;
     }
@@ -48,11 +50,9 @@ void resuelveCaso() {
 int main() {   
 #ifdef _WIN32
     system("chcp 65001");
-#elif __linxu__
-    system("pause() {");
-    system("echo "Presiona enter para continuar");
-    system("read");
-    system("}");
+#elif __linux__
+    system("pause() { echo \"Presiona Enter para continuar\" ; read; }");
+    system("alias cls=clear");
 #endif
     tJuego juego;
     printTitleScreen();

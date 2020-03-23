@@ -2,6 +2,7 @@
 #define _JUEGO_H
 
 #include <iostream>
+#include <iostream>
 #include "mina.h"
 #include "sprites.h"
 using namespace std;

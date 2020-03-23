@@ -5,11 +5,18 @@
 #include <vector>
 #include <algorithm>
 #include "juego.h"
+#ifdef _WIN32
+#include <conio.h>
+#elif __linux__
+#include <ncurses.h>
+/* Curses Initialisations */
+#endif
 #ifdef DOMJUDGE
 const bool DEBUG = false;
 #else
 const bool DEBUG = false;
 #endif
+
 using namespace std;
 
 void Log(string const& msg){ 
@@ -107,9 +114,81 @@ istream& operator>>(istream& movimientos, tTecla& tecla) {
 	return movimientos;
 }
 
+tTecla leerTeclado() {
+	tTecla tecla;
+	#ifdef _WIN32
+		int dir = _getch();
+		if (dir = 0xe0) 
+			dir = _getch();
+		switch(dir) {
+			case 27:
+				tecla = SALIR;
+				break;
+			case 72:
+				tecla = ARRIBA;
+				break;
+			case 80:
+				tecla = ABAJO;
+				break;
+			case 77:
+				tecla = DCHA;
+				break;
+			case 75:
+				tecla = IZDA;
+				break;
+			case 32:
+			case 64:
+			case 44:
+				tecla = TNT;
+				break;
+		}
+		return tecla;
+	#elif __linux__
+	initscr();
+	raw();
+	keypad(stdscr, TRUE);
+	noecho();
+
+	int dir = getchar();
+	if(dir = 27) dir = getchar();
+	if(dir = 91) dir = getchar();
+	else dir = 27;
+	switch(dir) {
+	case 65:
+		tecla = ARRIBA;
+		break;
+	case 66:
+		tecla = ABAJO;
+		break;
+	case 67:
+		tecla = DCHA;
+		break;
+	case 68:
+		tecla = IZDA;
+		break;
+	case 27:
+		tecla = SALIR;
+		break;
+	case 32:
+	case 64:
+	case 44:
+		tecla = TNT;
+		break;
+	}
+
+	endwin();
+	return tecla;
+	#endif
+}
+
 void leerMovimiento(tJuego & juego, tTecla & tecla, istream & movimientos) {
-	movimientos >> tecla;
-	if (tecla == SALIR) juego.estado = ABANDONO;
+	if(juego.dispositivoDeEntrada == 1)
+		tecla = leerTeclado();
+	else if(juego.dispositivoDeEntrada == 2)
+		movimientos >> tecla;
+
+	if (tecla == SALIR)
+		juego.estado = ABANDONO;
 }
 
 void dibujar(tJuego const& juego) {
