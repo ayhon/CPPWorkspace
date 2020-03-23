@@ -1,21 +1,9 @@
 #include <iostream>
+#include <string>
 #include "juego.h"
 using namespace std;
 
-void printTitleScreen() {
-    cout << " ███▄ ▄███▓ ▄▄▄        ██████ ▄▄▄█████▓▓█████  ██▀███      ███▄ ▄███▓ ██▓ ███▄    █ ▓█████  ██▀███  \n";
-    cout << "▓██▒▀█▀ ██▒▒████▄    ▒██    ▒ ▓  ██▒ ▓▒▓█   ▀ ▓██ ▒ ██▒   ▓██▒▀█▀ ██▒▓██▒ ██ ▀█   █ ▓█   ▀ ▓██ ▒ ██▒\n";
-    cout << "▓██    ▓██░▒██  ▀█▄  ░ ▓██▄   ▒ ▓██░ ▒░▒███   ▓██ ░▄█ ▒   ▓██    ▓██░▒██▒▓██  ▀█ ██▒▒███   ▓██ ░▄█ ▒\n";
-    cout << "▒██    ▒██ ░██▄▄▄▄██   ▒   ██▒░ ▓██▓ ░ ▒▓█  ▄ ▒██▀▀█▄     ▒██    ▒██ ░██░▓██▒  ▐▌██▒▒▓█  ▄ ▒██▀▀█▄  \n";
-    cout << "▒██▒   ░██▒ ▓█   ▓██▒▒██████▒▒  ▒██▒ ░ ░▒████▒░██▓ ▒██▒   ▒██▒   ░██▒░██░▒██░   ▓██░░▒████▒░██▓ ▒██▒\n";
-    cout << "░ ▒░   ░  ░ ▒▒   ▓▒█░▒ ▒▓▒ ▒ ░  ▒ ░░   ░░ ▒░ ░░ ▒▓ ░▒▓░   ░ ▒░   ░  ░░▓  ░ ▒░   ▒ ▒ ░░ ▒░ ░░ ▒▓ ░▒▓░\n";
-    cout << "░  ░      ░  ▒   ▒▒ ░░ ░▒  ░ ░    ░     ░ ░  ░  ░▒ ░ ▒░   ░  ░      ░ ▒ ░░ ░░   ░ ▒░ ░ ░  ░  ░▒ ░ ▒░\n";
-    cout << "░      ░     ░   ▒   ░  ░  ░    ░         ░     ░░   ░    ░      ░    ▒ ░   ░   ░ ░    ░     ░░   ░ \n";
-    cout << "░         ░  ░      ░              ░  ░   ░               ░    ░           ░    ░  ░   ░     \n";
-                                                                                                   
-}
-
-int escogerResolución() {
+int escogerResolucion() {
     int opcion;
     cout << "1. Jugar partida a escala 1:1\n";
     cout << "2. Jugar partida a escala 3:1\n";
@@ -47,9 +35,10 @@ void resuelveCaso() {
 int main() {   
     tJuego juego;
     printTitleScreen();
-    juego.resolucion = escogerResolución();
+    juego.resolucion = escogerResolucion();
     if(juego.resolucion != 0) {
-
+        vector<int> options = {4,32};
+        colorFondo(40, "Un mensaje por aquí, please", options); cout << '\n';
     }
     /*
     int numMinas; cin >> numMinas;

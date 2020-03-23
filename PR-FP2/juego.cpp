@@ -2,24 +2,19 @@
 #include <iostream>
 #include <climits>
 #include <string>
-#ifdef _WIN32
-const bool OS_WIN = true;
-#include <conio.h>
-#elif __linux__
-const bool OS_WIN = false;
-#include <curses.h>
-#endif
 #include <vector>
 #include <algorithm>
 #include "juego.h"
-using namespace std;
 #ifdef DOMJUDGE
 const bool DEBUG = false;
 #else
 const bool DEBUG = false;
 #endif
+using namespace std;
 
-void Log(string const& msg){ if (DEBUG) cout << msg << '\n';}
+void Log(string const& msg){ 
+	if (DEBUG) cout << msg << '\n';
+}
 
 void explosion(tJuego& juego, int x, int y) {
 	tPlano& plano = juego.mina.plano;

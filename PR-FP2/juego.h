@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include "mina.h"
+#include "sprites.h"
 using namespace std;
 enum tTecla { ARRIBA, ABAJO, DCHA, IZDA, SALIR, FIN, TNT, NADA, ERROR_TECLA };
 enum tEstado { EXPLORANDO, EXITO, ABANDONO, FRACASO, EXPLOTADO};

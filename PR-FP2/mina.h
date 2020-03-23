@@ -5,7 +5,7 @@
 #include <vector>
 using namespace std;
 
-enum tElemento {TIERRA, PIEDRA, MURO, GEMA, SALIDA, LIBRE, MINERO, TNT, ERROR_ELEM};
+enum tElemento {TIERRA, PIEDRA, MURO, GEMA, SALIDA, LIBRE, MINERO, DINAMITA, ERROR_ELEM};
 using tPlano = vector<vector<tElemento>>;
 
 struct tCoords { int x = -1, y = -1; }; // Para detectar errores

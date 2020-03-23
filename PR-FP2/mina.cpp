@@ -108,19 +108,6 @@ ostream & operator<< (ostream & out, tElemento const& e) {
 	return out;
 }
 
-void colorFondo(int color, string msg, vector<int> extra = {1}) {
-	#ifdef _WIN32
-	#include <Windows.h>
-	HANDLE handle = GetStdHandle(STD_OUTPUT_HANDLE);
-	SetConsoleTextAtribute(handle, 15 | (color << 4));
-	cout << msg;
-	SetConsoleTextAtribute(handle, 0 | (color << 4));
-	#elif __linux__
-	cout << "\e[" << extra.at(0);
-	for(int i = 1; i < extra.size(); ++i) cout << ";" << extra[i];
-	cout << ";" << color << "m" + msg + "\e[m";
-	#endif
-}
 
 void cargar_mina(istream & fichero, tMina & mina) {
 	// Requiere que mina venga con su propio tamaño.
