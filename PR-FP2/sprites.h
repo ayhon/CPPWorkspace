@@ -3,18 +3,19 @@
 
 // Diferencias entre windows y linux. (MacOS como que no, sorry)
 #ifdef _WIN32
-const bool OS_WIN = true;
 #include <conio.h>
+#include <Windows.h>
 #elif __linux__
-const bool OS_WIN = false;
 #include <curses.h>
 #endif
 
 #include <iostream>
 #include <vector>
 #include "mina.h"
-void sprite(tElemento elem, int section);
+enum tColor { NEGRO, AZUL, VERDE, CYAN, ROJO, MORADO, AMARILLO, BLANCO, GRIS};
+void sprite(tElemento elem, int section, tColor colorFondo = NEGRO, tColor colorTexto = BLANCO);
 void printTitleScreen();
-void colorFondo(int color, string msg, vector<int> extra);
+void printGameOver();
+void colorear(tColor colorFondo, string msg, tColor colorTexto = tColor(15));
 
 #endif

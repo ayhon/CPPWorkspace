@@ -176,7 +176,7 @@ void realizarMovimiento(tJuego& juego, tTecla& tecla) {
 			}
 			if (hazMovim) {
 				moverMinero(juego, nx, ny); //Actualiza juego.mina.minero pero no x o y
-				if (x != 0 && esElemQueCae(plano[x-1][y]));
+				if (x != 0 && esElemQueCae(plano[x-1][y]))
 					avalancha(juego, x-1, y);
 			}
 			else Log("No te mueves este turno");

@@ -13,30 +13,41 @@ const bool PRETTY_PRINT = true;
 #endif
 
 string to_string(tElemento const& elem) {
-	string res = "";
-    switch(elem) {
+	string c;
+	switch(elem) {
 		case MURO:
-			res = "MURO";
-			break;
-		case MINERO:
-			res = "MINERO";
-			break;
-		case TIERRA:
-			res = "TIERRA";
+			if(!PRETTY_PRINT) c = "X";
+			else c = "▉";
 			break;
 		case PIEDRA:
-			res = "PIEDRA";
+			if(!PRETTY_PRINT) c = "@";
+			else c = "▓";
+			break;
+		case TIERRA:
+			if(!PRETTY_PRINT) c = ".";
+			else c = "░";
 			break;
 		case GEMA:
-			res = "GEMA";
+			if(!PRETTY_PRINT) c = "G";
+			else c = "€";
 			break;
 		case SALIDA:
-			res = "SALIDA";
+			if(!PRETTY_PRINT) c = "S";
+			else c = "§";
+			break;
+		case MINERO:
+			if(!PRETTY_PRINT) c = "M";
+			else c = "¶";
 			break;
 		case LIBRE:
-			res = "LIBRE";
+			if(!PRETTY_PRINT) c = "-";
+			else c = " ";
+			break;
+		default:
+			if(!PRETTY_PRINT) c = "E";
+			else c = "©";
 	}
-	return res;
+	return c;
 }
 
 tElemento char2elem (char c) {

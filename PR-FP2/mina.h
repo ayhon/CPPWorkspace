@@ -1,8 +1,9 @@
-#ifndef _MINA
-#define _MINA
+#ifndef _MINA_H
+#define _MINA_H
 
 #include <iostream>
 #include <vector>
+#include <string>
 using namespace std;
 
 enum tElemento {TIERRA, PIEDRA, MURO, GEMA, SALIDA, LIBRE, MINERO, DINAMITA, ERROR_ELEM};
@@ -22,5 +23,6 @@ void dibujar3_1(tMina const& mina);
 bool dentroPlano(tMina const& mina, int x, int y);
 bool esElemQueCae(tElemento &elem);
 void colorFondo(int color, string msg);
+string to_string(tElemento const& elem);
 
 #endif
