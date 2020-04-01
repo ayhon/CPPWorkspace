@@ -4,38 +4,56 @@
 using namespace std;
 const vector<int> ctr = { 30,34,32,36,31,35,33,37,90 };
 
-void printTitleScreen() {
-    colorear(NEGRO, "                                                                                                 \n", AMARILLO);
-    colorear(NEGRO, " ███╗   ███╗ █████╗ ███████╗████████╗███████╗██████╗     ███╗   ███╗██╗███╗   ██╗███████╗██████╗ \n", AMARILLO);
-	colorear(NEGRO, " ████╗ ████║██╔══██╗██╔════╝╚══██╔══╝██╔════╝██╔══██╗    ████╗ ████║██║████╗  ██║██╔════╝██╔══██╗\n", AMARILLO);
-	colorear(NEGRO, " ██╔████╔██║███████║███████╗   ██║   █████╗  ██████╔╝    ██╔████╔██║██║██╔██╗ ██║█████╗  ██████╔╝\n", AMARILLO);
-	colorear(NEGRO, " ██║╚██╔╝██║██╔══██║╚════██║   ██║   ██╔══╝  ██╔══██╗    ██║╚██╔╝██║██║██║╚██╗██║██╔══╝  ██╔══██╗\n", AMARILLO);
-	colorear(NEGRO, " ██║ ╚═╝ ██║██║  ██║███████║   ██║   ███████╗██║  ██║    ██║ ╚═╝ ██║██║██║ ╚████║███████╗██║  ██║\n", AMARILLO);
-	colorear(NEGRO, " ╚═╝     ╚═╝╚═╝  ╚═╝╚══════╝   ╚═╝   ╚══════╝╚═╝  ╚═╝    ╚═╝     ╚═╝╚═╝╚═╝  ╚═══╝╚══════╝╚═╝  ╚═╝\n", AMARILLO);
+void printTitleScreen(tColor colorFondo, tColor colorTexto) {
+	system("cls");
+    colorear(colorFondo, "                                                                                                 \n", colorTexto);
+    colorear(colorFondo, " ███╗   ███╗ █████╗ ███████╗████████╗███████╗██████╗     ███╗   ███╗██╗███╗   ██╗███████╗██████╗ \n", colorTexto);
+	colorear(colorFondo, " ████╗ ████║██╔══██╗██╔════╝╚══██╔══╝██╔════╝██╔══██╗    ████╗ ████║██║████╗  ██║██╔════╝██╔══██╗\n", colorTexto);
+	colorear(colorFondo, " ██╔████╔██║███████║███████╗   ██║   █████╗  ██████╔╝    ██╔████╔██║██║██╔██╗ ██║█████╗  ██████╔╝\n", colorTexto);
+	colorear(colorFondo, " ██║╚██╔╝██║██╔══██║╚════██║   ██║   ██╔══╝  ██╔══██╗    ██║╚██╔╝██║██║██║╚██╗██║██╔══╝  ██╔══██╗\n", colorTexto);
+	colorear(colorFondo, " ██║ ╚═╝ ██║██║  ██║███████║   ██║   ███████╗██║  ██║    ██║ ╚═╝ ██║██║██║ ╚████║███████╗██║  ██║\n", colorTexto);
+	colorear(colorFondo, " ╚═╝     ╚═╝╚═╝  ╚═╝╚══════╝   ╚═╝   ╚══════╝╚═╝  ╚═╝    ╚═╝     ╚═╝╚═╝╚═╝  ╚═══╝╚══════╝╚═╝  ╚═╝\n", colorTexto);
 }
 
-void printGameOver() {
-    colorear(NEGRO, "                                     \n", ROJO);
-	colorear(NEGRO, "   ▄████  ▄▄▄       ███▄ ▄███▓▓█████ \n", ROJO);
-	colorear(NEGRO, "  ██▒ ▀█▒▒████▄    ▓██▒▀█▀ ██▒▓█   ▀ \n", ROJO);
-	colorear(NEGRO, " ▒██░▄▄▄░▒██  ▀█▄  ▓██    ▓██░▒███   \n", ROJO);
-	colorear(NEGRO, " ░▓█  ██▓░██▄▄▄▄██ ▒██    ▒██ ▒▓█  ▄ \n", ROJO);
-	colorear(NEGRO, " ░▒▓███▀▒ ▓█   ▓██▒▒██▒   ░██▒░▒████▒\n", ROJO);
-	colorear(NEGRO, "  ░▒   ▒  ▒▒   ▓▒█░░ ▒░   ░  ░░░ ▒░ ░\n", ROJO);
-	colorear(NEGRO, "   ░   ░   ▒   ▒▒ ░░  ░      ░ ░ ░  ░\n", ROJO);
-	colorear(NEGRO, " ░ ░   ░   ░   ▒   ░      ░      ░   \n", ROJO);
-	colorear(NEGRO, "       ░       ░  ░       ░      ░  ░\n", ROJO);
-	colorear(NEGRO, "                                     \n", ROJO);
-	colorear(NEGRO, "  ▒█████   ██▒   █▓▓█████  ██▀███    \n", ROJO);
-	colorear(NEGRO, " ▒██▒  ██▒▓██░   █▒▓█   ▀ ▓██ ▒ ██▒  \n", ROJO);
-	colorear(NEGRO, " ▒██░  ██▒ ▓██  █▒░▒███   ▓██ ░▄█ ▒  \n", ROJO);
-	colorear(NEGRO, " ▒██   ██░  ▒██ █░░▒▓█  ▄ ▒██▀▀█▄    \n", ROJO);
-	colorear(NEGRO, " ░ ████▓▒░   ▒▀█░  ░▒████▒░██▓ ▒██▒  \n", ROJO);
-	colorear(NEGRO, " ░ ▒░▒░▒░    ░ ▐░  ░░ ▒░ ░░ ▒▓ ░▒▓░  \n", ROJO);
-	colorear(NEGRO, "   ░ ▒ ▒░    ░ ░░   ░ ░  ░  ░▒ ░ ▒░  \n", ROJO);
-	colorear(NEGRO, " ░ ░ ░ ▒       ░░     ░     ░░   ░   \n", ROJO);
-	colorear(NEGRO, "     ░ ░        ░     ░  ░   ░       \n", ROJO);
-	colorear(NEGRO, "               ░                     \n", ROJO);
+void printGameOver(tColor colorFondo, tColor colorTexto) {
+	system("cls");
+    colorear(colorFondo, "                                     \n", colorTexto);
+	colorear(colorFondo, "   ▄████  ▄▄▄       ███▄ ▄███▓▓█████ \n", colorTexto);
+	colorear(colorFondo, "  ██▒ ▀█▒▒████▄    ▓██▒▀█▀ ██▒▓█   ▀ \n", colorTexto);
+	colorear(colorFondo, " ▒██░▄▄▄░▒██  ▀█▄  ▓██    ▓██░▒███   \n", colorTexto);
+	colorear(colorFondo, " ░▓█  ██▓░██▄▄▄▄██ ▒██    ▒██ ▒▓█  ▄ \n", colorTexto);
+	colorear(colorFondo, " ░▒▓███▀▒ ▓█   ▓██▒▒██▒   ░██▒░▒████▒\n", colorTexto);
+	colorear(colorFondo, "  ░▒   ▒  ▒▒   ▓▒█░░ ▒░   ░  ░░░ ▒░ ░\n", colorTexto);
+	colorear(colorFondo, "   ░   ░   ▒   ▒▒ ░░  ░      ░ ░ ░  ░\n", colorTexto);
+	colorear(colorFondo, " ░ ░   ░   ░   ▒   ░      ░      ░   \n", colorTexto);
+	colorear(colorFondo, "       ░       ░  ░       ░      ░  ░\n", colorTexto);
+	colorear(colorFondo, "                                     \n", colorTexto);
+	colorear(colorFondo, "  ▒█████   ██▒   █▓▓█████  ██▀███    \n", colorTexto);
+	colorear(colorFondo, " ▒██▒  ██▒▓██░   █▒▓█   ▀ ▓██ ▒ ██▒  \n", colorTexto);
+	colorear(colorFondo, " ▒██░  ██▒ ▓██  █▒░▒███   ▓██ ░▄█ ▒  \n", colorTexto);
+	colorear(colorFondo, " ▒██   ██░  ▒██ █░░▒▓█  ▄ ▒██▀▀█▄    \n", colorTexto);
+	colorear(colorFondo, " ░ ████▓▒░   ▒▀█░  ░▒████▒░██▓ ▒██▒  \n", colorTexto);
+	colorear(colorFondo, " ░ ▒░▒░▒░    ░ ▐░  ░░ ▒░ ░░ ▒▓ ░▒▓░  \n", colorTexto);
+	colorear(colorFondo, "   ░ ▒ ▒░    ░ ░░   ░ ░  ░  ░▒ ░ ▒░  \n", colorTexto);
+	colorear(colorFondo, " ░ ░ ░ ▒       ░░     ░     ░░   ░   \n", colorTexto);
+	colorear(colorFondo, "     ░ ░        ░     ░  ░   ░       \n", colorTexto);
+	colorear(colorFondo, "               ░                     \n", colorTexto);
+}
+
+void printVictory(tColor colorFondo, tColor colorTexto) {
+	system("cls");
+	colorear(NEGRO, "                                                                                 \n", colorTexto);
+	colorear(NEGRO, "  ▄█    █▄   ▄█   ▄████████     ███      ▄██████▄     ▄████████  ▄█     ▄████████\n", colorTexto);
+	colorear(NEGRO, " ███    ███ ███  ███    ███ ▀█████████▄ ███    ███   ███    ███ ███    ███    ███\n", colorTexto);
+	colorear(NEGRO, " ███    ███ ███▌ ███    █▀     ▀███▀▀██ ███    ███   ███    ███ ███▌   ███    ███\n", colorTexto);
+	colorear(NEGRO, " ███    ███ ███▌ ███            ███   ▀ ███    ███  ▄███▄▄▄▄██▀ ███▌   ███    ███\n", colorTexto);
+	colorear(NEGRO, " ███    ███ ███▌ ███            ███     ███    ███ ▀▀███▀▀▀▀▀   ███▌ ▀███████████\n", colorTexto);
+	colorear(NEGRO, " ███    ███ ███  ███    █▄      ███     ███    ███ ▀███████████ ███    ███    ███\n", colorTexto);
+	colorear(NEGRO, " ███    ███ ███  ███    ███     ███     ███    ███   ███    ███ ███    ███    ███\n", colorTexto);
+	colorear(NEGRO, "  ▀██████▀  █▀   ████████▀     ▄████▀    ▀██████▀    ███    ███ █▀     ███    █▀ \n", colorTexto);
+	colorear(NEGRO, "                                                     ███    ███                  \n", colorTexto);
+
+
 }
 
 void sprite(tElemento elem, int section, tColor colorFondo, tColor colorTexto) {

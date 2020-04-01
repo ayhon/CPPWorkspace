@@ -14,8 +14,9 @@
 #include "mina.h"
 enum tColor { NEGRO, AZUL, VERDE, CYAN, ROJO, MORADO, AMARILLO, BLANCO, GRIS};
 void sprite(tElemento elem, int section, tColor colorFondo = NEGRO, tColor colorTexto = BLANCO);
-void printTitleScreen();
-void printGameOver();
+void printTitleScreen(tColor colorFondo = NEGRO, tColor colorTexto = AMARILLO);
+void printGameOver(tColor colorFondo = NEGRO, tColor colorTexto = ROJO);
+void printVictory(tColor colorFondo = NEGRO, tColor colorTexto = VERDE);
 void colorear(tColor colorFondo, string msg, tColor colorTexto = tColor(15));
 
 #endif

@@ -9,7 +9,6 @@
 #include <conio.h>
 #elif __linux__
 #include <ncurses.h>
-/* Curses Initialisations */
 #endif
 #ifdef DOMJUDGE
 const bool DEBUG = false;
@@ -45,7 +44,12 @@ void lanzarDinamita(tJuego& juego) {
 		y = juego.mina.minero.y;
 	tPlano& plano = juego.mina.plano;
 	int tx; // target x
-	for (tx = x+1; tx < plano.size() && plano[tx][y] == LIBRE; tx++);
+	for (tx = x + 1; tx < plano.size() && plano[tx][y] == LIBRE; tx++) {
+		tElemento tmp = plano[tx][y];
+		plano[tx][y] = DINAMITA;
+		dibujar(juego);
+		plano[tx][y] = tmp;
+	}
 	tx--; // Volvamos a la última posición válida
 	explosion(juego, tx, y);
 }
@@ -63,7 +67,7 @@ void moverMinero(tJuego& juego, int hasta_x, int hasta_y) {
 void queCaiga(tJuego & juego, int x, int y) {
 	// !! No se encarga de que (x,y) deba caer
 	tPlano& plano = juego.mina.plano;
-	if(plano[x+1][y] == LIBRE) {
+	if(dentroPlano(juego.mina, x+1, y) && plano[x+1][y] == LIBRE) {
 			int nx;
 			for(nx = x+1; nx < plano.size() && plano[nx][y] == LIBRE; ++nx);
 			swap(plano[x][y], plano[nx-1][y]);
@@ -115,7 +119,7 @@ istream& operator>>(istream& movimientos, tTecla& tecla) {
 }
 
 tTecla leerTeclado() {
-	tTecla tecla;
+	tTecla tecla = ERROR_TECLA;
 	#ifdef _WIN32
 		int dir = _getch();
 		if (dir = 0xe0) 
@@ -192,6 +196,11 @@ void leerMovimiento(tJuego & juego, tTecla & tecla, istream & movimientos) {
 }
 
 void dibujar(tJuego const& juego) {
+#ifdef _WIN32
+	system("cls");
+#elif __linux__
+	system("clear");
+#endif
 	printStats(juego);
 	switch(juego.resolucion) {
 		case 1:
@@ -265,19 +274,23 @@ void realizarMovimiento(tJuego& juego, tTecla& tecla) {
 		lanzarDinamita(juego);
 	}
 	else Log("Has realizado un movimiento indebido, hacia ("+to_string(nx)+"-"+to_string(ny)+")\n");
-	if (DEBUG) { dibujar(juego); cout << '\n'; }
+	dibujar(juego);
 }
 
 
 void jugar(tJuego & juego, istream & entrada, istream & movimientos) {
-	cargar_mina(cin, juego.mina);
+	cargar_mina(entrada, juego.mina);
+	dibujar(juego);
 	tTecla input;
 	do{
 		leerMovimiento(juego, input, movimientos);
 		if(juego.estado != ABANDONO && input != FIN)  {
 			realizarMovimiento(juego, input);
 		} 
-	} while(input != FIN && juego.estado != ABANDONO && juego.estado != EXITO);
+	} while(input != FIN && juego.estado == EXPLORANDO);
 	dibujar(juego);
-	while(input != FIN) leerMovimiento(juego, input, movimientos); // Agotar movimientos no usados
+	/*
+	if(juego.dispositivoDeEntrada = 2) 
+		while(input != FIN) leerMovimiento(juego, input, movimientos); // Agotar movimientos no usados
+	*/
 }

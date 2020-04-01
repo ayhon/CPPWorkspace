@@ -17,6 +17,7 @@ struct tJuego {
 	int numMovimientosMinero = 0;
 	int resolucion = 0;
 	int dispositivoDeEntrada = 1;
+	string archivoDeEntrada = "";
 	int dinamitasUsadas = 0;
 }; 
 void leerMovimiento(tJuego & juego, tTecla & tecla, istream & movimientos);
