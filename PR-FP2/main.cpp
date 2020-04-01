@@ -1,34 +1,41 @@
 #include <iostream>
+#include <fstream>
 #include <string>
+#include <climits>
 #include "juego.h"
 using namespace std;
 
-int escogerResolucion() {
-    int opcion;
-    cout << "Escoge la resulución del juego\n";
-    cout << "1. Jugar partida a escala 1:1\n";
-    cout << "2. Jugar partida a escala 3:1\n";
-    cout << "0. Salir\n";
-    cout << "> "; cin >> opcion;
-    while(opcion > 2 || opcion < 0)  {
-        cout << "Entrada no valida. Escoge de nuevo\n"; 
-        cout << "> "; cin >> opcion;
+const int ULTIMO_NIVEL = 4;
+void escogerResolucion(tJuego & juego, ostream& flujoSalida = cout, istream& flujoEntrada = cin) {
+    flujoSalida << "Escoge la resolución del juego\n";
+    flujoSalida << "1. Jugar partida a escala 1:1\n";
+    flujoSalida << "2. Jugar partida a escala 3:1\n";
+    flujoSalida << "0. Salir\n";
+    flujoSalida << "> "; flujoEntrada >> juego.resolucion;
+    while(juego.resolucion > 2 || juego.resolucion < 0)  {
+        flujoSalida << "Entrada no valida. Escoge de nuevo\n"; 
+        flujoSalida << "> "; flujoEntrada >> juego.resolucion;
     }
-    return opcion;
 }
 
-int escogerDispEntrada() {
-    int opcion;
-    cout << "Escoge el dispositivo de entrada\n";
-    cout << "1. Usar teclado\n";
-    cout << "2. Usar un fichero\n";
-    cout << "0. Salir\n";
-    cout << "> "; cin >> opcion;
-    while(opcion > 2 || opcion < 0)  {
-        cout << "Entrada no valida. Escoge de nuevo\n"; 
-        cout << "> "; cin >> opcion;
+void escogerDispEntrada(tJuego & juego, ostream& flujoSalida = cout, istream& flujoEntrada = cin) {
+    flujoSalida << "Escoge el dispositivo de entrada\n";
+    flujoSalida << "1. Usar teclado\n";
+    flujoSalida << "2. Usar un fichero\n";
+    flujoSalida << "0. Salir\n";
+    flujoSalida << "> "; flujoEntrada >> juego.dispositivoDeEntrada;
+    while(juego.dispositivoDeEntrada > 2 || juego.dispositivoDeEntrada < 0)  {
+        flujoSalida << "Entrada no valida. Escoge de nuevo\n"; 
+        flujoSalida << "> "; flujoEntrada >> juego.dispositivoDeEntrada;
     }
-    return opcion;
+    if (juego.dispositivoDeEntrada == 2) {
+        string nombreArchivo;
+        flujoSalida << "Elige un archivo del que leer los movimientos\n";
+        flujoSalida << "> "; flujoEntrada >> nombreArchivo;
+        if (nombreArchivo.substr(nombreArchivo.size() - 4) != ".txt")
+            nombreArchivo += ".txt";
+        juego.archivoDeEntrada = nombreArchivo;
+    }
 }
 
 void resuelveCaso() {   
@@ -43,7 +50,7 @@ void resuelveCaso() {
             break;
         default:
             jugar(juego, cin, cin);
-            cout << "Error al sacar el dispositivo de entrada\n";
+            Log("Error al sacar el dispositivo de entrada\n");
     }
 }
 
@@ -56,32 +63,49 @@ int main() {
 #endif
     tJuego juego;
     printTitleScreen();
-    juego.resolucion = escogerResolucion();
+    escogerResolucion(juego);
     if(juego.resolucion != 0) {
-        juego.dispositivoDeEntrada = escogerDispEntrada();
-        vector<int> options = {4,32};
-        for (int i = 1; i <= 14; i++) {
-            colorear(tColor(i), to_string(i));
-            cout << '\n';
+        escogerDispEntrada(juego);
+        if (juego.dispositivoDeEntrada != 0) {
+            int nivel = 0;
+            bool salir = false;
+            while (!salir) {
+                ifstream archivoNivel;
+			    ifstream archivoEntrada;
+                int opcion;
+                juego.estado = EXPLORANDO;
+                nivel++;
+				archivoNivel.open(to_string(nivel) + ".txt");
+				if (archivoNivel.is_open()) {
+					if (juego.dispositivoDeEntrada == 1) {
+						jugar(juego, archivoNivel, cin);
+					}
+					else {
+						archivoEntrada.open(juego.archivoDeEntrada);
+						jugar(juego, archivoNivel, archivoEntrada);
+					}
+				}
+				else {
+					Log("No se encontró el archivo del nivel " + to_string(nivel) + "\n");
+				}
+				if (nivel == ULTIMO_NIVEL || (int(juego.estado) >= 2 || salir)) {
+					// Se imprime "Game Over" siempre que se salga del juego
+					if (juego.estado == EXITO)
+						printVictory();
+					else
+						printGameOver();
+					salir = true;
+				}
+				else {
+					cin.ignore(INT_MAX, '\n');
+					cout << "1. Jugar al siguiente nivel\n";
+					cout << "0. Salir\n";
+					cout << "> "; cin >> opcion;
+					if (opcion == 0) salir = true;
+				}
+            }
         }
-        system("pause");
-        system("cls");
-        printGameOver();
-        for (size_t i = 0; i <= 3; i++) {
-            sprite(MINERO, i);
-            sprite(DINAMITA, i);
-            sprite(GEMA, i);
-            sprite(SALIDA, i);
-            sprite(PIEDRA, i);
-            cout << '\n';
-        }
-    }
-    /*
-    int numMinas; cin >> numMinas;
-    for (int i = 0; i < numMinas; i++)
-    {
-        resuelveCaso();
-    }
-    */
+	}
+
    return 0;
 }
