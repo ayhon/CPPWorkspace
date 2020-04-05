@@ -8,7 +8,11 @@
 #ifdef _WIN32
 #include <conio.h>
 #elif __linux__
+<<<<<<< HEAD
 #include "conio.h"
+=======
+#include <ncurses.h>
+>>>>>>> dbcbe1e0ddd34d2b38d1aba20b547828613cc74f
 #endif
 #ifdef DOMJUDGE
 const bool DEBUG = false;
@@ -48,7 +52,10 @@ void lanzarDinamita(tJuego& juego) {
 		tElemento tmp = plano[tx][y];
 		plano[tx][y] = DINAMITA;
 		dibujar(juego);
+<<<<<<< HEAD
 		system("sleep .1");
+=======
+>>>>>>> dbcbe1e0ddd34d2b38d1aba20b547828613cc74f
 		plano[tx][y] = tmp;
 	}
 	tx--; // Volvamos a la última posición válida
@@ -121,6 +128,7 @@ istream& operator>>(istream& movimientos, tTecla& tecla) {
 
 tTecla leerTeclado() {
 	tTecla tecla = ERROR_TECLA;
+<<<<<<< HEAD
 #ifdef _WIN32
 	int dir = _getch();
 	if (dir = 0xe0)
@@ -130,6 +138,47 @@ tTecla leerTeclado() {
 		tecla = SALIR;
 		break;
 	case 72:
+=======
+	#ifdef _WIN32
+		int dir = _getch();
+		if (dir = 0xe0) 
+			dir = _getch();
+		switch(dir) {
+			case 27:
+				tecla = SALIR;
+				break;
+			case 72:
+				tecla = ARRIBA;
+				break;
+			case 80:
+				tecla = ABAJO;
+				break;
+			case 77:
+				tecla = DCHA;
+				break;
+			case 75:
+				tecla = IZDA;
+				break;
+			case 32:
+			case 64:
+			case 44:
+				tecla = TNT;
+				break;
+		}
+		return tecla;
+	#elif __linux__
+	initscr();
+	raw();
+	keypad(stdscr, TRUE);
+	noecho();
+
+	int dir = getchar();
+	if(dir = 27) dir = getchar();
+	if(dir = 91) dir = getchar();
+	else dir = 27;
+	switch(dir) {
+	case 65:
+>>>>>>> dbcbe1e0ddd34d2b38d1aba20b547828613cc74f
 		tecla = ARRIBA;
 		break;
 	case 80:
@@ -209,7 +258,15 @@ void leerMovimiento(tJuego & juego, tTecla & tecla, istream & movimientos) {
 }
 
 void dibujar(tJuego const& juego) {
+<<<<<<< HEAD
 	system("cls");
+=======
+#ifdef _WIN32
+	system("cls");
+#elif __linux__
+	system("clear");
+#endif
+>>>>>>> dbcbe1e0ddd34d2b38d1aba20b547828613cc74f
 	printStats(juego);
 	switch(juego.resolucion) {
 		case 1:

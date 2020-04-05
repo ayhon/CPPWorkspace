@@ -10,7 +10,7 @@ using namespace std;
 #ifdef DOMJUDGE
 const bool PRETTY_PRINT = false;
 #else
-const bool PRETTY_PRINT = true;
+const bool PRETTY_PRINT = false;
 #endif
 
 string to_string(tElemento const& elem) {
