@@ -8,13 +8,12 @@
 #ifdef _WIN32
 #include <conio.h>
 #elif __linux__
-#include <ncurses.h>
-/* Curses Initialisations */
+#include "conio.h"
 #endif
 #ifdef DOMJUDGE
 const bool DEBUG = false;
 #else
-const bool DEBUG = false;
+const bool DEBUG = true;
 #endif
 
 using namespace std;
@@ -45,7 +44,13 @@ void lanzarDinamita(tJuego& juego) {
 		y = juego.mina.minero.y;
 	tPlano& plano = juego.mina.plano;
 	int tx; // target x
-	for (tx = x+1; tx < plano.size() && plano[tx][y] == LIBRE; tx++);
+	for (tx = x + 1; tx < plano.size() && plano[tx][y] == LIBRE; tx++) {
+		tElemento tmp = plano[tx][y];
+		plano[tx][y] = DINAMITA;
+		dibujar(juego);
+		system("sleep .1");
+		plano[tx][y] = tmp;
+	}
 	tx--; // Volvamos a la última posición válida
 	explosion(juego, tx, y);
 }
@@ -63,7 +68,7 @@ void moverMinero(tJuego& juego, int hasta_x, int hasta_y) {
 void queCaiga(tJuego & juego, int x, int y) {
 	// !! No se encarga de que (x,y) deba caer
 	tPlano& plano = juego.mina.plano;
-	if(plano[x+1][y] == LIBRE) {
+	if(dentroPlano(juego.mina, x+1, y) && plano[x+1][y] == LIBRE) {
 			int nx;
 			for(nx = x+1; nx < plano.size() && plano[nx][y] == LIBRE; ++nx);
 			swap(plano[x][y], plano[nx-1][y]);
@@ -115,57 +120,70 @@ istream& operator>>(istream& movimientos, tTecla& tecla) {
 }
 
 tTecla leerTeclado() {
-	tTecla tecla;
-	#ifdef _WIN32
-		int dir = _getch();
-		if (dir = 0xe0) 
-			dir = _getch();
-		switch(dir) {
-			case 27:
-				tecla = SALIR;
-				break;
-			case 72:
-				tecla = ARRIBA;
-				break;
-			case 80:
-				tecla = ABAJO;
-				break;
-			case 77:
-				tecla = DCHA;
-				break;
-			case 75:
-				tecla = IZDA;
-				break;
-			case 32:
-			case 64:
-			case 44:
-				tecla = TNT;
-				break;
-		}
-		return tecla;
-	#elif __linux__
-	initscr();
-	raw();
-	keypad(stdscr, TRUE);
-	noecho();
-
-	int dir = getchar();
-	if(dir = 27) dir = getchar();
-	if(dir = 91) dir = getchar();
-	else dir = 27;
-	switch(dir) {
-	case 65:
+	tTecla tecla = ERROR_TECLA;
+#ifdef _WIN32
+	int dir = _getch();
+	if (dir = 0xe0)
+		dir = _getch();
+	switch (dir) {
+	case 27:
+		tecla = SALIR;
+		break;
+	case 72:
 		tecla = ARRIBA;
 		break;
-	case 66:
+	case 80:
 		tecla = ABAJO;
 		break;
-	case 67:
+	case 77:
 		tecla = DCHA;
 		break;
-	case 68:
+	case 75:
 		tecla = IZDA;
 		break;
+	case 32:
+	case 64:
+	case 44:
+		tecla = TNT;
+		break;
+	}
+	return tecla;
+#elif __linux__
+	bool specialKey = false;
+	int dir = _getch();
+	Log(to_string(dir) + " ");
+	if (dir = 27) {
+		dir = _getch();
+		Log(to_string(dir) + " ");
+	}
+	if (dir = 91) {
+		specialKey = true;
+		dir = _getch();
+		Log(to_string(dir) + " ");
+	}
+	else
+		dir = 7;
+	switch (dir) {
+	case 65:
+		if (specialKey)
+			tecla = ARRIBA;
+		break;
+	case 66:
+		if (specialKey)
+			tecla = ABAJO;
+		break;
+	case 67:
+		if (specialKey)
+			tecla = DCHA;
+		break;
+	case 68:
+		if (specialKey)
+			tecla = IZDA;
+		else
+			tecla = TNT;
+		break;
+	case 83:
+	case 114:
 	case 27:
 		tecla = SALIR;
 		break;
@@ -176,9 +194,8 @@ tTecla leerTeclado() {
 		break;
 	}
 
-	endwin();
 	return tecla;
-	#endif
+#endif
 }
 
 void leerMovimiento(tJuego & juego, tTecla & tecla, istream & movimientos) {
@@ -192,6 +209,7 @@ void leerMovimiento(tJuego & juego, tTecla & tecla, istream & movimientos) {
 }
 
 void dibujar(tJuego const& juego) {
+	system("cls");
 	printStats(juego);
 	switch(juego.resolucion) {
 		case 1:
@@ -205,7 +223,8 @@ void dibujar(tJuego const& juego) {
 	}
 	if(juego.estado == EXITO) cout << "Mina recorrida\n";
 	else if(juego.estado == EXPLOTADO) cout << "Le alcanzo la dinamita\n";
-	else cout << "Pide rescate\n";
+	else if (juego.estado == ABANDONO) cout << "Pide rescate\n";
+	else cout << '\n';
 }
 
 void realizarMovimiento(tJuego& juego, tTecla& tecla) {
@@ -265,19 +284,23 @@ void realizarMovimiento(tJuego& juego, tTecla& tecla) {
 		lanzarDinamita(juego);
 	}
 	else Log("Has realizado un movimiento indebido, hacia ("+to_string(nx)+"-"+to_string(ny)+")\n");
-	if (DEBUG) { dibujar(juego); cout << '\n'; }
+	dibujar(juego);
 }
 
 
 void jugar(tJuego & juego, istream & entrada, istream & movimientos) {
-	cargar_mina(cin, juego.mina);
+	cargar_mina(entrada, juego.mina);
+	dibujar(juego);
 	tTecla input;
 	do{
 		leerMovimiento(juego, input, movimientos);
 		if(juego.estado != ABANDONO && input != FIN)  {
 			realizarMovimiento(juego, input);
 		} 
-	} while(input != FIN && juego.estado != ABANDONO && juego.estado != EXITO);
+	} while(input != FIN && juego.estado == EXPLORANDO);
 	dibujar(juego);
-	while(input != FIN) leerMovimiento(juego, input, movimientos); // Agotar movimientos no usados
+	/*
+	if(juego.dispositivoDeEntrada = 2) 
+		while(input != FIN) leerMovimiento(juego, input, movimientos); // Agotar movimientos no usados
+	*/
 }

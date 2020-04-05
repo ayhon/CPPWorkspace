@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 #include "mina.h"
+#include "sprites.h"
 using namespace std;
 
 #ifdef DOMJUDGE
@@ -153,9 +154,7 @@ void dibujar3_1(tMina const& mina) {
 	for (size_t i = 0; i < mina.plano.size(); ++i){
 		for (size_t r1 = 0; r1 < ratio; ++r1){
 			for (size_t j = 0; j < mina.plano[i].size(); ++j){
-				for (size_t r2 = 0; r2 < ratio; ++r2){
-					cout << mina.plano[i][j];
-				}
+				sprite(mina.plano[i][j], r1);
 			}
 			cout << '\n';
 		}
@@ -164,7 +163,7 @@ void dibujar3_1(tMina const& mina) {
 
 bool dentroPlano(tMina const& mina, int x, int y) {
 	return x < mina.plano.size() &&
-		y < mina.plano.size() &&
+		y < mina.plano[0].size() &&
 		x >= 0 &&
 		y >= 0;
 }
