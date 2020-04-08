@@ -31,6 +31,7 @@ vii resolverPicos(int maxi, int mini) {
         pos = make_pair(0,i);
         movimientos.push_back(pos);
         visitar(pos, mat);
+        if (mat[pos.first][pos.second]) cout << "\e[32;1mERROR\e[m " << pos.first << "-" << pos.second << " ya visitado.\n";
         for (int j = 1; j < x; j++) {
             pos = pos + movsAltos[((j+1)%2)];
             if(mat[pos.first][pos.second]) cout << "\e[32;1mERROR\e[m " << pos.first << "-" << pos.second << " ya visitado.\n";
@@ -56,8 +57,10 @@ vii resolverEscalando(int maxi, int mini) {
                 pos = make_pair(j,i);
                 movimientos.push_back(pos);
                 visitar(pos, mat);
+                if (mat[pos.first][pos.second]) cout << "\e[32;1mERROR\e[m " << pos.first << "-" << pos.second << " ya visitado.\n";
                 while (pos.second < y - 2) {
                     pos = pos + make_pair(1, 2);
+                    if (mat[pos.first][pos.second]) cout << "\e[32;1mERROR\e[m " << pos.first << "-" << pos.second << " ya visitado.\n";
                     movimientos.push_back(pos);
                     visitar(pos, mat);
                 }
@@ -69,7 +72,7 @@ vii resolverEscalando(int maxi, int mini) {
 
 void resuelveCaso() {
     int rows, columns; cin >> rows >> columns;
-    bool possible = max(rows, columns) + min(rows, columns) >= 7;
+    bool possible = max(rows, columns) + min(rows, columns) >= 7 && !(rows == 1 || columns == 1);
 
     if(possible) {
         cout << "POSSIBLE\n";

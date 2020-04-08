@@ -24,7 +24,8 @@ bool resuelveCaso() {
         sol += dAnt.size();
         while(!dAnt.empty() && dAnt.top() <= d[i]) {
             dAnt.pop();
-        } dAnt.push(d[i]);
+        } 
+        dAnt.push(d[i]);
     }
     
     cout << sol << '\n';
