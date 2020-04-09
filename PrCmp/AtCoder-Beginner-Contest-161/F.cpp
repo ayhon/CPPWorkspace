@@ -1,0 +1,55 @@
+#include <iostream>
+#include <vector>
+#include <set>
+using namespace std;
+using vi = vector<int>;
+using ii = pair<int, int>;
+using vii = vector<ii>;
+
+vector<bool> criba(10000, true);
+vi primes;
+
+void genCriba() {
+	criba[0] = false;
+	criba[1] = false;
+	for (int i = 2; i < criba.size(); i++) {
+		if(criba[i])  {
+			primes.push_back(i);
+			for (int j = 2; j*i < criba.size(); j++)
+				criba[i*j] = false;
+		}
+	}
+}
+
+vi factorize(int num) {
+	vi factors;
+	int idx = 0;
+	while(num != 1 && idx < primes.size()) {
+		if(num % primes[idx] == 0) factors.push_back(primes[idx]);
+		while(num % primes[idx] == 0) {
+			num /= primes[idx];
+		}
+		idx++;
+	}
+	return factors;
+}
+
+int main() {
+	long long N; cin >> N;
+	set<long long> poss;
+
+	genCriba();
+	vi factors = factorize(N);
+
+	long long superprod = 1;
+	for (long long fact : factors) superprod *= fact;
+	for (int i = 0; i < factors.size(); i++) {
+		if(superprod/primes[i] % primes[i] == 1)
+			poss.insert(primes[i]);
+	}
+	poss.insert(N);
+	poss.insert(N-1);
+
+	cout << poss.size() << '\n';
+	return 0;
+}
