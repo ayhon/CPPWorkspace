@@ -14,8 +14,10 @@ endif
 
 "// AUTOCOMANDS
 au BufNewFile,BufRead /*.rasi setf css
+au BufNewFile *.cpp 0read ~/.config/nvim/templates/template.cpp
 "au FileType cpp nnoremap <F5> :w<CR>:!clear && g++ -g -o % %< <CR>:split term://gdb -ex 'break resuelveCaso' %<CR>
-au FileType cpp nnoremap <F5> :w<CR>:!clear && g++ -g -o program.out *.cpp <CR>:GdbStart gdb -q program.out<CR>
+
+au FileType cpp nnoremap <F5> :w<CR>:!clear && g++ -g -o program.out % <CR>:GdbStart gdb -q program.out<CR>
 au FileType cpp nnoremap <space>y ggVG"+yVG"*y
 
 "// SETTINGS
@@ -26,6 +28,6 @@ set tabstop=4
 set shiftwidth=4
 
 "// KEYBINDINGS
-nnoremap <space>g :Goyo 60%x60%<Return>
+nnoremap <space>g :Goyo 60%x100%<Return>
 "nnoremap <space>y ggVG"+yVG"*y
 inoremap <c-e> <c-c>^i//<c-c>'.i
