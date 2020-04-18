@@ -23,15 +23,13 @@ void genCriba() {
 
 vi factorize(int num) {
 	vi factors;
-	int idx = 0;
-	while(num != 1 && idx < primes.size()) {
-		if(num % primes[idx] == 0) factors.push_back(primes[idx]);
-		while(num % primes[idx] == 0) {
-			num /= primes[idx];
+	for (int i = 0; i < primes.size() && num != 1;) {
+		if(num % primes[i] == 0){
+			num /= primes[i];
+			factors.push_back(primes[i]);
 		}
-		idx++;
+		else i++;
 	}
-	return factors;
 }
 
 int main() {
