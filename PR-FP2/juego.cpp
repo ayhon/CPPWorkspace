@@ -8,11 +8,7 @@
 #ifdef _WIN32
 #include <conio.h>
 #elif __linux__
-<<<<<<< HEAD
 #include "conio.h"
-=======
-#include <ncurses.h>
->>>>>>> dbcbe1e0ddd34d2b38d1aba20b547828613cc74f
 #endif
 #ifdef DOMJUDGE
 const bool DEBUG = false;
@@ -26,8 +22,7 @@ void Log(string const& msg){
 	if (DEBUG) cout << msg << '\n';
 }
 
-void explosion(tJuego& juego, int x, int y) {
-	tPlano& plano = juego.mina.plano;
+void explosion(tJuego& juego, int x, int y) { tPlano& plano = juego.mina.plano;
 	for (int i = x-1; i <= x+1; i++) {
 		for (int j = y-1; j <= y+1; j++) {
 			if(dentroPlano(juego.mina, i, j)){
@@ -52,10 +47,7 @@ void lanzarDinamita(tJuego& juego) {
 		tElemento tmp = plano[tx][y];
 		plano[tx][y] = DINAMITA;
 		dibujar(juego);
-<<<<<<< HEAD
 		system("sleep .1");
-=======
->>>>>>> dbcbe1e0ddd34d2b38d1aba20b547828613cc74f
 		plano[tx][y] = tmp;
 	}
 	tx--; // Volvamos a la última posición válida
@@ -128,57 +120,15 @@ istream& operator>>(istream& movimientos, tTecla& tecla) {
 
 tTecla leerTeclado() {
 	tTecla tecla = ERROR_TECLA;
-<<<<<<< HEAD
 #ifdef _WIN32
 	int dir = _getch();
-	if (dir = 0xe0)
+	if (dir == 0xe0)
 		dir = _getch();
 	switch (dir) {
 	case 27:
 		tecla = SALIR;
 		break;
 	case 72:
-=======
-	#ifdef _WIN32
-		int dir = _getch();
-		if (dir = 0xe0) 
-			dir = _getch();
-		switch(dir) {
-			case 27:
-				tecla = SALIR;
-				break;
-			case 72:
-				tecla = ARRIBA;
-				break;
-			case 80:
-				tecla = ABAJO;
-				break;
-			case 77:
-				tecla = DCHA;
-				break;
-			case 75:
-				tecla = IZDA;
-				break;
-			case 32:
-			case 64:
-			case 44:
-				tecla = TNT;
-				break;
-		}
-		return tecla;
-	#elif __linux__
-	initscr();
-	raw();
-	keypad(stdscr, TRUE);
-	noecho();
-
-	int dir = getchar();
-	if(dir = 27) dir = getchar();
-	if(dir = 91) dir = getchar();
-	else dir = 27;
-	switch(dir) {
-	case 65:
->>>>>>> dbcbe1e0ddd34d2b38d1aba20b547828613cc74f
 		tecla = ARRIBA;
 		break;
 	case 80:
@@ -201,17 +151,17 @@ tTecla leerTeclado() {
 	bool specialKey = false;
 	int dir = _getch();
 	Log(to_string(dir) + " ");
-	if (dir = 27) {
+	if (dir == 27) {
 		dir = _getch();
 		Log(to_string(dir) + " ");
+		if (dir == 91) {
+			specialKey = true;
+			dir = _getch();
+			Log(to_string(dir) + " ");
+		}
+		else
+			dir = 7;
 	}
-	if (dir = 91) {
-		specialKey = true;
-		dir = _getch();
-		Log(to_string(dir) + " ");
-	}
-	else
-		dir = 7;
 	switch (dir) {
 	case 65:
 		if (specialKey)
@@ -232,12 +182,13 @@ tTecla leerTeclado() {
 			tecla = TNT;
 		break;
 	case 83:
-	case 114:
+	case 115:
 	case 27:
 		tecla = SALIR;
 		break;
 	case 32:
 	case 64:
+	case 112:
 	case 44:
 		tecla = TNT;
 		break;
@@ -258,15 +209,7 @@ void leerMovimiento(tJuego & juego, tTecla & tecla, istream & movimientos) {
 }
 
 void dibujar(tJuego const& juego) {
-<<<<<<< HEAD
-	system("cls");
-=======
-#ifdef _WIN32
-	system("cls");
-#elif __linux__
-	system("clear");
-#endif
->>>>>>> dbcbe1e0ddd34d2b38d1aba20b547828613cc74f
+	systemClear();
 	printStats(juego);
 	switch(juego.resolucion) {
 		case 1:

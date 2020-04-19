@@ -22,7 +22,6 @@ void dibujar1_1(tMina const& mina);
 void dibujar3_1(tMina const& mina);
 bool dentroPlano(tMina const& mina, int x, int y);
 bool esElemQueCae(tElemento &elem);
-void colorFondo(int color, string msg);
 string to_string(tElemento const& elem);
 
 #endif

@@ -66,10 +66,7 @@ int main() {
     escogerResolucion(juego);
     if(juego.resolucion != 0) {
         escogerDispEntrada(juego);
-<<<<<<< HEAD
         cin.ignore(INT_MAX, '\n');
-=======
->>>>>>> dbcbe1e0ddd34d2b38d1aba20b547828613cc74f
         if (juego.dispositivoDeEntrada != 0) {
             int nivel = 0;
             bool salir = false;
@@ -101,18 +98,11 @@ int main() {
 					salir = true;
 				}
 				else {
-<<<<<<< HEAD
-=======
-					cin.ignore(INT_MAX, '\n');
->>>>>>> dbcbe1e0ddd34d2b38d1aba20b547828613cc74f
 					cout << "1. Jugar al siguiente nivel\n";
 					cout << "0. Salir\n";
 					cout << "> "; cin >> opcion;
 					if (opcion == 0) salir = true;
-<<<<<<< HEAD
-                    cin.ignore(INT_MAX, '\n');
-=======
->>>>>>> dbcbe1e0ddd34d2b38d1aba20b547828613cc74f
+					cin.ignore(INT_MAX, '\n');
 				}
             }
         }

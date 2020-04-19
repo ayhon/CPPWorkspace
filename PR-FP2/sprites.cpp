@@ -3,9 +3,60 @@
 #include "sprites.h"
 using namespace std;
 const vector<int> ctr = { 30,34,32,36,31,35,33,37,90 };
+const tTheme ThemeName = THEME_DEFAULT;
+
+void systemClear() {
+#ifdef _WIN32
+	system("cls");
+#elif __linux__
+	system("clear");
+#endif
+}
+
+tColor theme(char opt, tElemento elem) {
+	tColor res;
+
+	switch(ThemeName) {
+		case THEME_DEFAULT:
+			switch(elem) {
+				case TIERRA:
+					res = tColor(opt=='t'? AMARILLO : GRIS); 
+					break;
+				case PIEDRA:
+					res = tColor(opt=='t'? GRIS : NEGRO);
+					break;
+				case MURO:
+					res = tColor(opt=='t'? GRIS : GRIS);
+					break;
+				case GEMA:
+					res = tColor(opt=='t'? VERDE : NEGRO);
+					break;
+				case SALIDA:
+					res = tColor(opt=='t'? MORADO : NEGRO);
+					break;
+				case MINERO:
+					res = tColor(opt=='t'? AZUL : NEGRO);
+					break;
+				case LIBRE:
+					res = tColor(opt=='t'? NEGRO : NEGRO);
+					break;
+				case DINAMITA:
+					res = tColor(opt=='t'? ROJO : NEGRO); 
+					break;
+				default:
+					res = tColor(opt=='t'? MORADO : AMARILLO);
+			}
+			break;
+		case THEME_BnW:
+		default:
+			res = tColor(opt=='t'? BLANCO : NEGRO);
+	}
+
+	return res;
+}
 
 void printTitleScreen(tColor colorFondo, tColor colorTexto) {
-	system("cls");
+	systemClear();
     colorear(colorFondo, "                                                                                                 \n", colorTexto);
     colorear(colorFondo, " ███╗   ███╗ █████╗ ███████╗████████╗███████╗██████╗     ███╗   ███╗██╗███╗   ██╗███████╗██████╗ \n", colorTexto);
 	colorear(colorFondo, " ████╗ ████║██╔══██╗██╔════╝╚══██╔══╝██╔════╝██╔══██╗    ████╗ ████║██║████╗  ██║██╔════╝██╔══██╗\n", colorTexto);
@@ -16,7 +67,7 @@ void printTitleScreen(tColor colorFondo, tColor colorTexto) {
 }
 
 void printGameOver(tColor colorFondo, tColor colorTexto) {
-	system("cls");
+	systemClear();
     colorear(colorFondo, "                                     \n", colorTexto);
 	colorear(colorFondo, "   ▄████  ▄▄▄       ███▄ ▄███▓▓█████ \n", colorTexto);
 	colorear(colorFondo, "  ██▒ ▀█▒▒████▄    ▓██▒▀█▀ ██▒▓█   ▀ \n", colorTexto);
@@ -41,7 +92,7 @@ void printGameOver(tColor colorFondo, tColor colorTexto) {
 }
 
 void printVictory(tColor colorFondo, tColor colorTexto) {
-	system("cls");
+	systemClear();
 	colorear(NEGRO, "                                                                                 \n", colorTexto);
 	colorear(NEGRO, "  ▄█    █▄   ▄█   ▄████████     ███      ▄██████▄     ▄████████  ▄█     ▄████████\n", colorTexto);
 	colorear(NEGRO, " ███    ███ ███  ███    ███ ▀█████████▄ ███    ███   ███    ███ ███    ███    ███\n", colorTexto);

@@ -10,7 +10,7 @@ using namespace std;
 #ifdef DOMJUDGE
 const bool PRETTY_PRINT = false;
 #else
-const bool PRETTY_PRINT = false;
+const bool PRETTY_PRINT = true;
 #endif
 
 string to_string(tElemento const& elem) {
@@ -154,7 +154,7 @@ void dibujar3_1(tMina const& mina) {
 	for (size_t i = 0; i < mina.plano.size(); ++i){
 		for (size_t r1 = 0; r1 < ratio; ++r1){
 			for (size_t j = 0; j < mina.plano[i].size(); ++j){
-				sprite(mina.plano[i][j], r1);
+				sprite(mina.plano[i][j], r1, theme('f', mina.plano[i][j]), theme('t', mina.plano[i][j]));
 			}
 			cout << '\n';
 		}
