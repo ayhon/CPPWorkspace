@@ -8,11 +8,13 @@ using namespace std;
 
 enum tElemento {TIERRA, PIEDRA, MURO, GEMA, SALIDA, LIBRE, MINERO, DINAMITA, ERROR_ELEM};
 using tPlano = vector<vector<tElemento>>;
+using tPlanoVisitados = vector<vector<bool>>;
 
 struct tCoords { int x = -1, y = -1; }; // Para detectar errores
 struct tMina {
 	tCoords minero;
 	tPlano plano;
+	tPlanoVisitados visitados;
 };
 
 tElemento char2elem (char c);

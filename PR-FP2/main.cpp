@@ -5,7 +5,7 @@
 #include "juego.h"
 using namespace std;
 
-const int ULTIMO_NIVEL = 4;
+const int ULTIMO_NIVEL = 5;
 void escogerResolucion(tJuego & juego, ostream& flujoSalida = cout, istream& flujoEntrada = cin) {
     flujoSalida << "Escoge la resolución del juego\n";
     flujoSalida << "1. Jugar partida a escala 1:1\n";

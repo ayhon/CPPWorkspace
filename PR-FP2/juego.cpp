@@ -69,7 +69,7 @@ void queCaiga(tJuego & juego, int x, int y) {
 	tPlano& plano = juego.mina.plano;
 	if(dentroPlano(juego.mina, x+1, y) && plano[x+1][y] == LIBRE) {
 			int nx;
-			for(nx = x+1; nx < plano.size() && plano[nx][y] == LIBRE; ++nx);
+			for(nx = x+1; nx < plano.size() && plano[nx][y] == LIBRE; ++nx) juego.mina.visitados[nx][y] = true;
 			swap(plano[x][y], plano[nx-1][y]);
 	}
 }
@@ -274,6 +274,7 @@ void realizarMovimiento(tJuego& juego, tTecla& tecla) {
 			}
 			if (hazMovim) {
 				moverMinero(juego, nx, ny); //Actualiza juego.mina.minero pero no x o y
+				juego.mina.visitados[nx][ny] = true;
 				if (x != 0 && esElemQueCae(plano[x-1][y]))
 					avalancha(juego, x-1, y);
 			}

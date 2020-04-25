@@ -120,13 +120,13 @@ ostream & operator<< (ostream & out, tElemento const& e) {
 	return out;
 }
 
-
 void cargar_mina(istream & fichero, tMina & mina) {
 	// Requiere que mina venga con su propio tamaño.
 	int numFilas, numColumnas;
 	fichero >> numFilas >> numColumnas;
 	fichero.ignore(INT_MAX, '\n');
 	mina.plano = tPlano(numFilas, vector<tElemento> (numColumnas));
+	mina.visitados = tPlanoVisitados(numFilas, vector<bool> (numColumnas, false));
 	string input;
 	for (size_t i = 0; i < mina.plano.size(); ++i){
 		getline(fichero, input);
@@ -154,7 +154,9 @@ void dibujar3_1(tMina const& mina) {
 	for (size_t i = 0; i < mina.plano.size(); ++i){
 		for (size_t r1 = 0; r1 < ratio; ++r1){
 			for (size_t j = 0; j < mina.plano[i].size(); ++j){
-				sprite(mina.plano[i][j], r1, theme('f', mina.plano[i][j]), theme('t', mina.plano[i][j]));
+				tColor colorFondo = (mina.plano[i][j]==GEMA && mina.visitados[i][j]? NEGRO : theme('f', mina.plano[i][j])),
+					   colorTexto = theme('t', mina.plano[i][j]);
+				sprite(mina.plano[i][j], r1, colorFondo, colorTexto);
 			}
 			cout << '\n';
 		}

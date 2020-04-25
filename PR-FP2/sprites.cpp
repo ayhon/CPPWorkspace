@@ -29,7 +29,7 @@ tColor theme(char opt, tElemento elem) {
 					res = tColor(opt=='t'? GRIS : GRIS);
 					break;
 				case GEMA:
-					res = tColor(opt=='t'? VERDE : NEGRO);
+					res = tColor(opt=='t'? VERDE : GRIS);
 					break;
 				case SALIDA:
 					res = tColor(opt=='t'? MORADO : NEGRO);
