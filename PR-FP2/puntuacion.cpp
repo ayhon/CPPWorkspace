@@ -1,3 +1,4 @@
+// TODO: Implementar el módulo en la práctica
 #include <iostream>
 #include <algorithm>
 #include <iomanip>
@@ -15,7 +16,7 @@ void inicializar_pj(tPuntuacionJugador& pj) {
 		datos.numMovimientos = 0;
 		datos.numGemas = 0;
 		datos.numDinamitas =0;
-		datos.puntosMina = 0;
+		datos.puntosMina = -1;
 	}
 }
 
@@ -59,33 +60,58 @@ void guardar_marcador(ostream & salida, tPuntuaciones & marcador) {
 	cout << "000\n";
 }
 
-void mostrar_minas_usuario(const tPuntuaciones & marcador, int pos, int tabSize = -1) {
+void mostrar_minas_usuario(const tPuntuaciones & marcador, int pos, int tabSize) {
 	// ^Muestra los datos de `marcador.arrayClasificacion[pos]`
-	int tab;
+	int tab = (tabSize? tabSize : 9);
 	tPuntuacionJugador & jugador = marcador.arrayClasificacion[pos];
-	if(tabSize < 0) tab = max((int)jugador.nombre.size() + 2, 8);
-	else tab = tabSize;
-
-	cout << left << setw(tab) << jugador.nombre 
-		<< right << setw(tab) << "Movimientos"
-		<< right << setw(tab) << "Gemas"
-		<< right << setw(tab) << "Dinamitas"
-		<< right << setw(tab) << "Puntos"
-		<< right << setw(tab) << "Puntos en total";
-	// TODO: Terminar esta función (De aquí hasta })
-	for(int i = 0; i < jugador.minasRecorridas; i++)
-	cout << left << setw(tab) << jugador.nombre 
-		<< right << setw(tab) << "Movimientos"
-		<< right << setw(tab) << "Gemas"
-		<< right << setw(tab) << "Dinamitas"
-		<< right << setw(tab) << "Puntos"
-		<< right << setw(tab) << "Puntos en total";
 	
+	// Cabecera inicial
+	cout << left << setw(tab) << jugador.nombre 
+		<< right << setw(2*tab) << "Movimientos "
+		<< right << setw(tab) << "Gemas "
+		<< right << setw(2*tab) << "Dinamitas "
+		<< right << setw(tab) << "Puntos "
+		<< right << setw(2*tab) << "Puntos en total ";
+
+	for(int i = 0; i < NUM_TOTAL_MINAS;i++) {
+		tDatosMina & dato = jugador.vMinasRecorridas[i];
+		if(dato.puntosMina != -1) {
+			cout << left << setw(tab) << "Mina"+to_string(dato.IdMina) 
+				<< right << setw(2*tab) << dato.numMovimientos
+				<< right << setw(tab) << dato.numGemas
+				<< right << setw(2*tab) << dato.numDinamitas
+				<< right << setw(tab) << dato.puntosMina;
+			if(i == 0) cout << right << setw(2*tab) << '\n';
+			else cout << '\n';
+		}
+
+	}
 }
-void mostrar_puntuaciones_alfabetico(const tPuntuaciones & marcador);
-// ^Muestra las puntuaciones de todos los usuarios (orden αβ)
-void mostrar_datos_usuario(const tPuntuaciones & marcador);
-// ^Muestra todos los datos de todos los usuarios (orden αβ)
+
+void mostrar_puntuaciones_alfabetico(const tPuntuaciones & marcador) {
+	// ^Muestra las puntuaciones de todos los usuarios (orden αβ)
+	string msg = "----------- LISTA DE JUGADORES -----------\n";
+	cout << msg;
+	int tab = msg.size() * 2 / 5;
+	for(int i = 0 ; i < marcador.numJugadores; i++) {
+		tPuntuacionJugador & jugador = marcador.arrayClasificacion[i];
+		cout <<  setw(tab) << " ";
+		colorear(NEGRO, jugador.nombre, ROJO); cout << " " << jugador.puntTotal << '\n';
+	}
+	systemPause();
+}
+
+void mostrar_datos_usuario(const tPuntuaciones & marcador) {
+	// ^Muestra todos los datos de todos los usuarios (orden αβ)
+	string msg = "----- JUGADORES ORDENADOS POR NOMBRE -----\n";
+	cout << msg;
+		cout << '\n';
+	for(int i = 0; i < marcador.numJugadores; i++) {
+		mostrar_minas_usuario(marcador, i);
+		cout << '\n';
+	}
+	systemPause();
+}
 
 void inicializar_marcador(tPuntuaciones & marcador) {
 	// ^Inicializa el array dinámico
@@ -93,6 +119,7 @@ void inicializar_marcador(tPuntuaciones & marcador) {
 	marcador.capacidad = 2; 
 	marcador.arrayClasificacion = new tPuntuacionJugador[marcador.capacidad];
 }
+
 void aumentar_capacidad(tPuntuaciones & marcador) {
 	// ^Duplica el tamaño del array
 	marcador.capacidad *= 2;

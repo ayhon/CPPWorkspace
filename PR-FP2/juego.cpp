@@ -162,6 +162,7 @@ tTecla leerTeclado() {
 		else
 			dir = 7;
 	}
+	Log(to_string(dir) + " ");
 	switch (dir) {
 	case 65:
 		if (specialKey)

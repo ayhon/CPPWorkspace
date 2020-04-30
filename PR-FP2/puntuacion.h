@@ -4,6 +4,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include "sprites.h"
 using namespace std;
 
 const unsigned int NUM_TOTAL_MINAS = 5;
@@ -32,7 +33,7 @@ void cargar_marcador(istream & entrada, tPuntuaciones & marcador);
 // ^Carga los datos de `entrada` en `marcador`
 void guardar_marcador(ostream & salida, tPuntuaciones & marcador);
 // ^Guarda los datos de `marcador` en el fichero `salida`
-void mostrar_minas_usuario(const tPuntuaciones & marcador, int pos);
+void mostrar_minas_usuario(const tPuntuaciones & marcador, int pos, int tabSize = -1);
 // ^Muestra los datos de `marcador.arrayClasificacion[pos]`
 void mostrar_puntuaciones_alfabetico(const tPuntuaciones & marcador);
 // ^Muestra las puntuaciones de todos los usuarios (orden αβ)

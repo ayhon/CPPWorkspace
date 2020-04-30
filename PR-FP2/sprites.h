@@ -22,5 +22,6 @@ void printGameOver(tColor colorFondo = NEGRO, tColor colorTexto = ROJO);
 void printVictory(tColor colorFondo = NEGRO, tColor colorTexto = VERDE);
 void colorear(tColor colorFondo, string msg, tColor colorTexto = tColor(15));
 void systemClear();
+void systemPause();
 
 #endif

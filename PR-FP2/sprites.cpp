@@ -13,6 +13,11 @@ void systemClear() {
 #endif
 }
 
+void systemPause() {
+	cout << "Presione una tecla para continuar . . .\n";
+	char aux = getch();
+}
+
 tColor theme(char opt, tElemento elem) {
 	tColor res;
 
