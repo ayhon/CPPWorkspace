@@ -1,3 +1,5 @@
+#ifndef _CONIO_LINUX
+#define _CONIO_LINUX
 // found on http://stackoverflow.com/a/7469410/1579481
 #include <termios.h>
 #include <stdio.h>
@@ -41,3 +43,4 @@ char _getche(void)
 {
   return getch_(1);
 }
+#endif

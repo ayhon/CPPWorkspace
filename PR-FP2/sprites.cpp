@@ -14,8 +14,12 @@ void systemClear() {
 }
 
 void systemPause() {
+#ifdef _WIN32
+	system("pause");
+#elif __linux__
 	cout << "Presione una tecla para continuar . . .\n";
-	char aux = getch();
+	system("read");
+#endif
 }
 
 tColor theme(char opt, tElemento elem) {
@@ -94,6 +98,7 @@ void printGameOver(tColor colorFondo, tColor colorTexto) {
 	colorear(colorFondo, " ░ ░ ░ ▒       ░░     ░     ░░   ░   \n", colorTexto);
 	colorear(colorFondo, "     ░ ░        ░     ░  ░   ░       \n", colorTexto);
 	colorear(colorFondo, "               ░                     \n", colorTexto);
+	systemPause();
 }
 
 void printVictory(tColor colorFondo, tColor colorTexto) {
@@ -108,8 +113,7 @@ void printVictory(tColor colorFondo, tColor colorTexto) {
 	colorear(NEGRO, " ███    ███ ███  ███    ███     ███     ███    ███   ███    ███ ███    ███    ███\n", colorTexto);
 	colorear(NEGRO, "  ▀██████▀  █▀   ████████▀     ▄████▀    ▀██████▀    ███    ███ █▀     ███    █▀ \n", colorTexto);
 	colorear(NEGRO, "                                                     ███    ███                  \n", colorTexto);
-
-
+	systemPause();
 }
 
 void sprite(tElemento elem, int section, tColor colorFondo, tColor colorTexto) {

@@ -3,9 +3,12 @@
 #include <string>
 #include <climits>
 #include "juego.h"
+#include "puntuacion.h"
 using namespace std;
 
 const int ULTIMO_NIVEL = 5;
+const string ARCHIVO_MARCADOR = "puntuaciones.txt";
+
 void escogerResolucion(tJuego & juego, ostream& flujoSalida = cout, istream& flujoEntrada = cin) {
     flujoSalida << "Escoge la resolución del juego\n";
     flujoSalida << "1. Jugar partida a escala 1:1\n";
@@ -57,26 +60,55 @@ void resuelveCaso() {
 int main() {   
 #ifdef _WIN32
     system("chcp 65001");
+	/*
+//Intenté que no hubieran demasiados #ifdef _WIN32 en la práctica, pero falló
 #elif __linux__
     system("pause() { echo \"Presiona Enter para continuar\" ; read; }");
     system("alias cls=clear");
+	*/
 #endif
     tJuego juego;
     printTitleScreen();
     escogerResolucion(juego);
     if(juego.resolucion != 0) {
         escogerDispEntrada(juego);
-        cin.ignore(INT_MAX, '\n');
+		cin.ignore(INT_MAX, '\n');
         if (juego.dispositivoDeEntrada != 0) {
+			// Se ha elegido la resolución del juego, y el dispositivo de entrada.
             int nivel = 0;
             bool salir = false;
+			tPuntuaciones marcador; inicializar_marcador(marcador);
+			ifstream archivoMarcador; archivoMarcador.open(ARCHIVO_MARCADOR);
+			if(archivoMarcador.is_open()) {
+				cargar_marcador(archivoMarcador, marcador);
+			}
+			else {
+				colorear(ROJO, "[ERROR]: ");
+				Log("No se encontró el archivo "+ARCHIVO_MARCADOR+" para cargar el marcador");
+			}
+			mostrar_datos_usuario(marcador);
+			mostrar_puntuaciones_alfabetico(marcador);
+
+			// Se carga el marcador con los datos del fichero
+
+			/*  Se introduce el nombre del jugador.
+			 *  Si existe el nombre, se le muestra su puntuación
+			 *  Si no existe el nombre, se le pide que ponga uno (Y se muestra)
+			 *  Se le pide elegir que nivel quiere explorar
+			 *
+			 *   Ahora ya no es importante el nivel en el que estamos para ver cuando se termina el juego,
+			 *   sino si el usuario ha decidido salir o no.
+			 *   Al salir del juego, se debe además guardar el marcador
+			 */
+
             while (!salir) {
-                ifstream archivoNivel;
-			    ifstream archivoEntrada;
+                ifstream archivoNivel, archivoEntrada;
                 int opcion;
-                juego.estado = EXPLORANDO;
-                nivel++;
+
+                juego.estado = EXPLORANDO; // Si no hemos salido, es que estamos explorando aún
+                nivel++; 
 				archivoNivel.open(to_string(nivel) + ".txt");
+
 				if (archivoNivel.is_open()) {
 					if (juego.dispositivoDeEntrada == 1) {
 						jugar(juego, archivoNivel, cin);
@@ -89,7 +121,8 @@ int main() {
 				else {
 					Log("No se encontró el archivo del nivel " + to_string(nivel) + "\n");
 				}
-				if (nivel == ULTIMO_NIVEL || (int(juego.estado) >= 2 || salir)) {
+
+				if (nivel == ULTIMO_NIVEL || (int(juego.estado) >= 2 || salir)) { // TODO: Ese salir no debería de hacer nada
 					// Se imprime "Game Over" siempre que se salga del juego
 					if (juego.estado == EXITO)
 						printVictory();

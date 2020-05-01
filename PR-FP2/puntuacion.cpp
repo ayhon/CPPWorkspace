@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <iomanip>
 #include "puntuacion.h"
+
 using namespace std;
 
 void inicializar_pj(tPuntuacionJugador& pj) {
@@ -12,11 +13,11 @@ void inicializar_pj(tPuntuacionJugador& pj) {
 	pj.minasRecorridas = 0;
 	for(int i = 0; i < NUM_TOTAL_MINAS; i++) {
 		tDatosMina & datos = pj.vMinasRecorridas[i];
-		datos.IdMina = i+1;
+		datos.IdMina = -1;
 		datos.numMovimientos = 0;
 		datos.numGemas = 0;
 		datos.numDinamitas =0;
-		datos.puntosMina = -1;
+		datos.puntosMina = 0;
 	}
 }
 
@@ -71,15 +72,15 @@ void mostrar_minas_usuario(const tPuntuaciones & marcador, int pos, int tabSize)
 		<< right << setw(tab) << "Gemas "
 		<< right << setw(2*tab) << "Dinamitas "
 		<< right << setw(tab) << "Puntos "
-		<< right << setw(2*tab) << "Puntos en total ";
+		<< right << setw(2*tab) << "Puntos en total\n";
 
 	for(int i = 0; i < NUM_TOTAL_MINAS;i++) {
 		tDatosMina & dato = jugador.vMinasRecorridas[i];
-		if(dato.puntosMina != -1) {
-			cout << left << setw(tab) << "Mina"+to_string(dato.IdMina) 
-				<< right << setw(2*tab) << dato.numMovimientos
-				<< right << setw(tab) << dato.numGemas
-				<< right << setw(2*tab) << dato.numDinamitas
+		if(dato.IdMina != -1) {
+			cout << right << setw(tab) << "Mina"+to_string(dato.IdMina) 
+				<< right << setw(2*tab) << dato.numMovimientos << " "
+				<< right << setw(tab) << dato.numGemas << " "
+				<< right << setw(2*tab) << dato.numDinamitas << " "
 				<< right << setw(tab) << dato.puntosMina;
 			if(i == 0) cout << right << setw(2*tab) << '\n';
 			else cout << '\n';
@@ -91,6 +92,7 @@ void mostrar_minas_usuario(const tPuntuaciones & marcador, int pos, int tabSize)
 void mostrar_puntuaciones_alfabetico(const tPuntuaciones & marcador) {
 	// ^Muestra las puntuaciones de todos los usuarios (orden αβ)
 	string msg = "----------- LISTA DE JUGADORES -----------\n";
+	colorear(NEGRO, msg, AZUL);
 	cout << msg;
 	int tab = msg.size() * 2 / 5;
 	for(int i = 0 ; i < marcador.numJugadores; i++) {
@@ -104,6 +106,7 @@ void mostrar_puntuaciones_alfabetico(const tPuntuaciones & marcador) {
 void mostrar_datos_usuario(const tPuntuaciones & marcador) {
 	// ^Muestra todos los datos de todos los usuarios (orden αβ)
 	string msg = "----- JUGADORES ORDENADOS POR NOMBRE -----\n";
+	colorear(NEGRO, msg, AZUL);
 	cout << msg;
 		cout << '\n';
 	for(int i = 0; i < marcador.numJugadores; i++) {
