@@ -1,14 +1,13 @@
-// TODO: Implementar el módulo en la práctica
+// TODO: Arreglar busquedaBinaria()
 #include <iostream>
 #include <algorithm>
 #include <iomanip>
 #include "puntuacion.h"
-
 using namespace std;
 
 void inicializar_pj(tPuntuacionJugador& pj) {
 	// ^Inicializa `pj`
-	pj.nombre = ""; 
+	pj.nombre = "";
 	pj.puntTotal = 0;
 	pj.minasRecorridas = 0;
 	for(int i = 0; i < NUM_TOTAL_MINAS; i++) {
@@ -50,15 +49,15 @@ void guardar_marcador(ostream & salida, tPuntuaciones & marcador) {
 	// ^Guarda los datos de `marcador` en el fichero `salida`
 	for(int i = 0; i < marcador.numJugadores; i++) {
 		tPuntuacionJugador & jugador = marcador.arrayClasificacion[i];
-		salida << jugador.nombre << '\n' << jugador.minasRecorridas << '\n';
+		salida << jugador.nombre << '\n' << jugador.puntTotal << '\n' << jugador.minasRecorridas << '\n';
 		for(int j = 0; j < jugador.minasRecorridas; j++) {
 			tDatosMina & dato = jugador.vMinasRecorridas[j];
-			salida << dato.IdMina << " " << dato.numDinamitas << " ";
-			salida << dato.numGemas << " " << dato.numMovimientos << " ";
+			salida << dato.IdMina << " " << dato.numMovimientos << " ";
+			salida << dato.numGemas << " " << dato.numDinamitas << " ";
 			salida << dato.puntosMina << "\n";
 		}
 	}
-	cout << "000\n";
+	salida << "000\n";
 }
 
 void mostrar_minas_usuario(const tPuntuaciones & marcador, int pos, int tabSize) {
@@ -67,25 +66,25 @@ void mostrar_minas_usuario(const tPuntuaciones & marcador, int pos, int tabSize)
 	tPuntuacionJugador & jugador = marcador.arrayClasificacion[pos];
 	
 	// Cabecera inicial
-	cout << left << setw(tab) << jugador.nombre 
-		<< right << setw(2*tab) << "Movimientos "
-		<< right << setw(tab) << "Gemas "
-		<< right << setw(2*tab) << "Dinamitas "
-		<< right << setw(tab) << "Puntos "
-		<< right << setw(2*tab) << "Puntos en total\n";
+	// TODO: Arreglar problema de optimiación
+	cout << left << '|' << setw(tab) << jugador.nombre 
+		<< left << '|' << setw(2*tab) << "Movimientos "
+		<< left << '|' << setw(tab) << "Gemas "
+		<< left << '|' << setw(2*tab) << "Dinamitas "
+		<< left << '|' << setw(tab) << "Puntos "
+		<< left << '|' << setw(2*tab) << "Puntos en total" << "\n";
 
 	for(int i = 0; i < NUM_TOTAL_MINAS;i++) {
 		tDatosMina & dato = jugador.vMinasRecorridas[i];
 		if(dato.IdMina != -1) {
-			cout << right << setw(tab) << "Mina"+to_string(dato.IdMina) 
-				<< right << setw(2*tab) << dato.numMovimientos << " "
-				<< right << setw(tab) << dato.numGemas << " "
-				<< right << setw(2*tab) << dato.numDinamitas << " "
-				<< right << setw(tab) << dato.puntosMina;
-			if(i == 0) cout << right << setw(2*tab) << '\n';
+			cout << left << '|' << setw(tab) << "Mina"+to_string(dato.IdMina)
+				<< left << '|' << setw(2*tab) << dato.numMovimientos 
+				<< left << '|' << setw(tab) << dato.numGemas 
+				<< left << '|' << setw(2*tab) << dato.numDinamitas 
+				<< left << '|' << setw(tab) << dato.puntosMina;
+			if(i == 0) cout << left << '|' << setw(2*tab) << jugador.puntTotal << '\n';
 			else cout << '\n';
 		}
-
 	}
 }
 
@@ -93,7 +92,6 @@ void mostrar_puntuaciones_alfabetico(const tPuntuaciones & marcador) {
 	// ^Muestra las puntuaciones de todos los usuarios (orden αβ)
 	string msg = "----------- LISTA DE JUGADORES -----------\n";
 	colorear(NEGRO, msg, AZUL);
-	cout << msg;
 	int tab = msg.size() * 2 / 5;
 	for(int i = 0 ; i < marcador.numJugadores; i++) {
 		tPuntuacionJugador & jugador = marcador.arrayClasificacion[i];
@@ -107,8 +105,6 @@ void mostrar_datos_usuario(const tPuntuaciones & marcador) {
 	// ^Muestra todos los datos de todos los usuarios (orden αβ)
 	string msg = "----- JUGADORES ORDENADOS POR NOMBRE -----\n";
 	colorear(NEGRO, msg, AZUL);
-	cout << msg;
-		cout << '\n';
 	for(int i = 0; i < marcador.numJugadores; i++) {
 		mostrar_minas_usuario(marcador, i);
 		cout << '\n';
@@ -139,7 +135,7 @@ void destruir(tPuntuaciones & marcador) {
 	delete marcador.arrayClasificacion;
 }
 
-bool binarySearch(const string& nombre, const tPuntuaciones & marcador, int&pos, int ini, int fin) {
+bool binarySearch(const string& nombre, const tPuntuaciones & marcador, int & pos, int ini, int fin) {
 	// Devuelve la posición donde estaría `nombre` en el array
 	bool res = false;
 	if(ini <= fin) {
@@ -177,4 +173,18 @@ void insertar(tPuntuaciones& marcador, string const& nombre, int pos) {
 
 	inicializar_pj(marcador.arrayClasificacion[pos]);
 	marcador.arrayClasificacion[pos].nombre = nombre;
+}
+
+int calcPuntos(tJuego & juego, tDatosMina & mina) {
+	// ^ Calcula los puntos de una mina
+	return juego.mina.plano.size() + juego.mina.plano[0].size() + mina.numGemas * PTOS_GEMAS  - mina.numDinamitas * PTOS_TNT - mina.numMovimientos * PTOS_MOVS;
+}
+int calcPuntos(tJuego & juego, tPuntuacionJugador & jugador) {
+	// ^ Calcula los puntos totales de un jugador
+	int res = 0;
+	for(int i = 0; i < NUM_TOTAL_MINAS; i++) {
+		if(jugador.vMinasRecorridas[i].IdMina != -1) 
+			res += jugador.vMinasRecorridas[i].puntosMina;
+	}
+	return res;
 }
