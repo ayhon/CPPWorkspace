@@ -7,6 +7,8 @@
 #include <Windows.h>
 #elif __linux__
 #include <curses.h>
+#elif __APPLE_
+#include <curses.h>
 #endif
 
 #include <iostream>

@@ -123,17 +123,19 @@ int main() {
 			/*mostrar_datos_usuario(marcador);
 			mostrar_puntuaciones_alfabetico(marcador);*/
 
-			int pos;
+			int pos = 0;
 			string username = get_name_dialog(marcador, pos);
 			nivel = get_level(username);
 
 			tPuntuacionJugador & jugador = marcador.arrayClasificacion[pos];
 
             while (nivel != 0) {
-				int ultimoNumMovs = juego.numMovimientosMinero;
-                ifstream archivoNivel, archivoEntrada;
-
+				juego.numMovimientosMinero = 0;
+				juego.gemasRecogidas = 0;
+				juego.dinamitasUsadas = 0;
                 juego.estado = EXPLORANDO; // Si no hemos salido, es que estamos explorando aún
+
+                ifstream archivoNivel, archivoEntrada;
 				archivoNivel.open(to_string(nivel) + ".txt");
 
 				if (archivoNivel.is_open()) {
@@ -149,11 +151,12 @@ int main() {
 
 					// TODO: Mover esto a su propia función (juego, jugador, nivel)
 					jugador.vMinasRecorridas[nivel-1].IdMina = nivel;
-					jugador.vMinasRecorridas[nivel-1].numMovimientos = juego.numMovimientosMinero - ultimoNumMovs;
+					jugador.vMinasRecorridas[nivel-1].numMovimientos = juego.numMovimientosMinero;
 					jugador.vMinasRecorridas[nivel-1].numDinamitas = juego.dinamitasUsadas;
 					jugador.vMinasRecorridas[nivel-1].numGemas = juego.gemasRecogidas;
 					jugador.vMinasRecorridas[nivel-1].puntosMina = max(calcPuntos(juego, jugador.vMinasRecorridas[nivel-1]), jugador.vMinasRecorridas[nivel-1].puntosMina);
 					jugador.puntTotal = calcPuntos(juego, jugador);
+					jugador.minasRecorridas++;
 				}
 				else {
 					Log("No se encontró el archivo del nivel " + to_string(nivel) + "\n");
