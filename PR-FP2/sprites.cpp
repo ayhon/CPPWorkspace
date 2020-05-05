@@ -5,13 +5,18 @@ using namespace std;
 const vector<int> ctr = { 30,34,32,36,31,35,33,37,90 };
 const tTheme ThemeName = THEME_DEFAULT;
 
-void systemClear() {
+void systemClear(bool partial) {
 #ifdef _WIN32
-	system("cls");
-#elif __linux__
-	system("clear");
-#elif __APPLE__
-	system("clear");
+	if(partial) {
+		setCursorPosition(0, 0);
+		cout.flush();
+	}
+	else system("cls");
+#else
+	if(partial) {
+		cout << "\e[0;0H" << endl;
+	}
+	else system("clear");
 #endif
 }
 

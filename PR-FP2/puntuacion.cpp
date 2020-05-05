@@ -1,7 +1,7 @@
 // TODO: Arreglar busquedaBinaria()
 #include <iostream>
 #include <algorithm>
-#include <iomanip>
+#include <iomanip> 
 #include "puntuacion.h"
 using namespace std;
 
@@ -50,11 +50,13 @@ void guardar_marcador(ostream & salida, tPuntuaciones & marcador) {
 	for(int i = 0; i < marcador.numJugadores; i++) {
 		tPuntuacionJugador & jugador = marcador.arrayClasificacion[i];
 		salida << jugador.nombre << '\n' << jugador.puntTotal << '\n' << jugador.minasRecorridas << '\n';
-		for(int j = 0; j < jugador.minasRecorridas; j++) {
+		for(int j = 0; j < NUM_TOTAL_MINAS; j++) {
 			tDatosMina & dato = jugador.vMinasRecorridas[j];
-			salida << dato.IdMina << " " << dato.numMovimientos << " ";
-			salida << dato.numGemas << " " << dato.numDinamitas << " ";
-			salida << dato.puntosMina << "\n";
+			if(dato.IdMina != -1) {
+				salida << dato.IdMina << " " << dato.numMovimientos << " ";
+				salida << dato.numGemas << " " << dato.numDinamitas << " ";
+				salida << dato.puntosMina << "\n";
+			} 
 		}
 	}
 	salida << "000\n";
@@ -155,7 +157,10 @@ bool binarySearch(const string& nombre, const tPuntuaciones & marcador, int & po
 
 bool buscar(const string& nombre, const tPuntuaciones& marcador, int& pos) {
 	// ^Busqueda binaria de`nombre` en `marcador`. `pos` es la posición donde iría
-	pos = 0;
+	pos = marcador.numJugadores;
+	/* Suponemos inicialmente que está al final, pues si no está y nunca es menor que un elemento
+	 * del marcador, allí es donde deberá acabar
+	 */
 	return binarySearch(nombre, marcador, pos, 0, marcador.numJugadores-1);
 }
 
@@ -178,6 +183,7 @@ int calcPuntos(tJuego & juego, tDatosMina & mina) {
 	// ^ Calcula los puntos de una mina
 	return juego.mina.plano.size() + juego.mina.plano[0].size() + mina.numGemas * PTOS_GEMAS  - mina.numDinamitas * PTOS_TNT - mina.numMovimientos * PTOS_MOVS;
 }
+
 int calcPuntos(tJuego & juego, tPuntuacionJugador & jugador) {
 	// ^ Calcula los puntos totales de un jugador
 	int res = 0;

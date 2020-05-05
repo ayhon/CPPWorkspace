@@ -63,9 +63,10 @@ string get_name_dialog(tPuntuaciones & marcador, int & pos, int tabSize = 0) {
 	return nombre;
 }
 
-int get_level(string nombre) {
+int get_level(string nombre, tColor colorTexto = AMARILLO) {
 	int res;
-	cout << nombre << ", ¿Qué mina quieres explorar?.\n"
+	colorear(NEGRO, nombre, colorTexto);
+	cout << ", ¿Qué mina quieres explorar?.\n"
 		<< "Introduce un número entre 1 y " << NUM_TOTAL_MINAS << " para explorar una mina, y 0 para salir\n> ";
 	cin >> res;
 	while(res < 0 && res > NUM_TOTAL_MINAS) {
@@ -139,6 +140,7 @@ int main() {
 				archivoNivel.open(to_string(nivel) + ".txt");
 
 				if (archivoNivel.is_open()) {
+					systemClear();
 					if (juego.dispositivoDeEntrada == 1) {
 						jugar(juego, archivoNivel, cin);
 					}
@@ -150,13 +152,16 @@ int main() {
 					archivoNivel.close();
 
 					// TODO: Mover esto a su propia función (juego, jugador, nivel)
-					jugador.vMinasRecorridas[nivel-1].IdMina = nivel;
+					if(jugador.vMinasRecorridas[nivel-1].IdMina == -1){
+						jugador.minasRecorridas++;
+						jugador.vMinasRecorridas[nivel-1].IdMina = nivel;
+					} 
 					jugador.vMinasRecorridas[nivel-1].numMovimientos = juego.numMovimientosMinero;
 					jugador.vMinasRecorridas[nivel-1].numDinamitas = juego.dinamitasUsadas;
 					jugador.vMinasRecorridas[nivel-1].numGemas = juego.gemasRecogidas;
+					// Esto se puede optmizar un poco
 					jugador.vMinasRecorridas[nivel-1].puntosMina = max(calcPuntos(juego, jugador.vMinasRecorridas[nivel-1]), jugador.vMinasRecorridas[nivel-1].puntosMina);
 					jugador.puntTotal = calcPuntos(juego, jugador);
-					jugador.minasRecorridas++;
 				}
 				else {
 					Log("No se encontró el archivo del nivel " + to_string(nivel) + "\n");
@@ -184,6 +189,7 @@ int main() {
 				systemClear();
 			}
 			destruir(marcador);
+			cout << "Gracias por jugar\n";
         }
 	}
 

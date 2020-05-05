@@ -150,7 +150,7 @@ tTecla leerTeclado() {
 		break;
 	}
 	return tecla;
-#elif __linux__
+#else
 	bool specialKey = false;
 	int dir = _getch();
 	Log(to_string(dir) + " ");
@@ -230,7 +230,7 @@ void leerMovimiento(tJuego & juego, tTecla & tecla, istream & movimientos) {
 }
 
 void dibujar(tJuego const& juego) {
-	systemClear();
+	systemClear(true);
 	printStats(juego);
 	switch(juego.resolucion) {
 		case 1:
