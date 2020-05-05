@@ -98,7 +98,6 @@ void mostrar_puntuaciones_alfabetico(const tPuntuaciones & marcador) {
 		cout <<  setw(tab) << " ";
 		colorear(NEGRO, jugador.nombre, ROJO); cout << " " << jugador.puntTotal << '\n';
 	}
-	systemPause();
 }
 
 void mostrar_datos_usuario(const tPuntuaciones & marcador) {
@@ -109,7 +108,6 @@ void mostrar_datos_usuario(const tPuntuaciones & marcador) {
 		mostrar_minas_usuario(marcador, i);
 		cout << '\n';
 	}
-	systemPause();
 }
 
 void inicializar_marcador(tPuntuaciones & marcador) {
@@ -132,7 +130,7 @@ void aumentar_capacidad(tPuntuaciones & marcador) {
 void destruir(tPuntuaciones & marcador) {
 	// ^Libera la memoria dinámica de marcador
 	int capacidad = 0, numJugadores = 0;
-	delete marcador.arrayClasificacion;
+	delete[] marcador.arrayClasificacion;
 }
 
 bool binarySearch(const string& nombre, const tPuntuaciones & marcador, int & pos, int ini, int fin) {
@@ -157,6 +155,7 @@ bool binarySearch(const string& nombre, const tPuntuaciones & marcador, int & po
 
 bool buscar(const string& nombre, const tPuntuaciones& marcador, int& pos) {
 	// ^Busqueda binaria de`nombre` en `marcador`. `pos` es la posición donde iría
+	pos = 0;
 	return binarySearch(nombre, marcador, pos, 0, marcador.numJugadores-1);
 }
 

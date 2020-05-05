@@ -10,6 +10,8 @@ void systemClear() {
 	system("cls");
 #elif __linux__
 	system("clear");
+#elif __APPLE__
+	system("clear");
 #endif
 }
 
@@ -17,6 +19,9 @@ void systemPause() {
 #ifdef _WIN32
 	system("pause");
 #elif __linux__
+	cout << "Presione una tecla para continuar . . .\n";
+	system("read");
+#elif __APPLE__
 	cout << "Presione una tecla para continuar . . .\n";
 	system("read");
 #endif
@@ -178,6 +183,8 @@ void colorear(tColor colorFondo, string msg, tColor colorTexto) {
         cout << msg;
         SetConsoleTextAttribute(handle, 15 | (0 << 4));
     #elif __linux__
+        cout << "\e[1;" << ctr[int(colorTexto)] << ";" << ctr[int(colorFondo)] + 10 << "m" + msg + "\e[m";
+	#elif __APPLE__
         cout << "\e[1;" << ctr[int(colorTexto)] << ";" << ctr[int(colorFondo)] + 10 << "m" + msg + "\e[m";
     #endif
 }

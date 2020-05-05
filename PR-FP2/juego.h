@@ -6,6 +6,13 @@
 #include "mina.h"
 #include "sprites.h"
 using namespace std;
+
+#ifdef DOMJUDGE
+const bool DEBUG = false;
+#else
+const bool DEBUG = true;
+#endif
+
 enum tTecla { ARRIBA, ABAJO, DCHA, IZDA, SALIR, FIN, TNT, NADA, ERROR_TECLA };
 enum tEstado { EXPLORANDO, EXITO, ABANDONO, FRACASO, EXPLOTADO};
 const tCoords tdirs4[4] = { {-1,0}, {1,0}, {0, 1}, {0, -1} };

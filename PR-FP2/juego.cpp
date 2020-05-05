@@ -5,15 +5,13 @@
 #include <vector>
 #include <algorithm>
 #include "juego.h"
+
 #ifdef _WIN32
 #include <conio.h>
 #elif __linux__
 #include "conio.h"
-#endif
-#ifdef DOMJUDGE
-const bool DEBUG = false;
-#else
-const bool DEBUG = true;
+#elif __APPLE__
+#include "conio.h"
 #endif
 
 using namespace std;
@@ -128,18 +126,23 @@ tTecla leerTeclado() {
 	case 27:
 		tecla = SALIR;
 		break;
+	case 107: // Vim keybindings
 	case 72:
 		tecla = ARRIBA;
 		break;
+	case 106: // Vim keybindings
 	case 80:
 		tecla = ABAJO;
 		break;
+	case 108: // Vim keybindings
 	case 77:
 		tecla = DCHA;
 		break;
+	case 104: // Vim keybindings
 	case 75:
 		tecla = IZDA;
 		break;
+	case 105: // Vim keybindings
 	case 32:
 	case 64:
 	case 44:
@@ -164,6 +167,23 @@ tTecla leerTeclado() {
 	}
 	Log(to_string(dir) + " ");
 	switch (dir) {
+	// Vim keybindings
+	case 104: 
+		tecla = IZDA;
+		break;
+	case 105: 
+		tecla = TNT;
+		break;
+	case 106: 
+		tecla = ABAJO;
+		break;
+	case 107: 
+		tecla = ARRIBA;
+		break;
+	case 108: 
+		tecla = DCHA;
+		break;
+
 	case 65:
 		if (specialKey)
 			tecla = ARRIBA;
