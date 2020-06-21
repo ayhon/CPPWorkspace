@@ -1,10 +1,3 @@
-/*
- * IMPLEMENTACIÓN DE CONIO.H PARA LINUX
- * Nada que entienda en profundidad, esto está aquí solo para que la práctica
- * funcione en Windows. No lo he escrito yo, lo he sacado de StackOverflow, link
- * más abajo. 
- */
-
 #ifndef _CONIO_LINUX
 #define _CONIO_LINUX
 // found on http://stackoverflow.com/a/7469410/1579481

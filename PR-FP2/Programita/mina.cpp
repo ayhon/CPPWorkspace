@@ -14,7 +14,6 @@ const bool PRETTY_PRINT = true;
 #endif
 
 string to_string(tElemento const& elem) {
-	//^Traduce elementos con sus caracteres para la impresión
 	string c;
 	switch(elem) {
 		case MURO:
@@ -53,7 +52,6 @@ string to_string(tElemento const& elem) {
 }
 
 tElemento char2elem (char c) {
-	//^Traduce caracteres a elementos (Para la lectura de minas por fichero)
 	tElemento elem;
 	switch(c) {
 		case 'M':
@@ -84,8 +82,6 @@ tElemento char2elem (char c) {
 }
 
 ostream & operator<< (ostream & out, tElemento const& e) {
-	//^Sobrecarga del operador << para escribir elementos 
-	// La verdad es que podría haber usado to_string sobrecargado, no? xD
 	string c;
 	switch(e) {
 		case MURO:
@@ -125,8 +121,7 @@ ostream & operator<< (ostream & out, tElemento const& e) {
 }
 
 void cargar_mina(istream & fichero, tMina & mina) {
-	//^Carga la mina de un fichero
-	// Requiere que mina venga con su propio tamaño 
+	// Requiere que mina venga con su propio tamaño.
 	int numFilas, numColumnas;
 	fichero >> numFilas >> numColumnas;
 	fichero.ignore(INT_MAX, '\n');
@@ -146,8 +141,6 @@ void cargar_mina(istream & fichero, tMina & mina) {
 }
 
 void dibujar1_1(tMina const& mina) {
-	//^Imprime en resolución 1:1
-	// No admite colores
 	for (size_t i = 0; i < mina.plano.size(); ++i){
 		for (size_t j = 0; j < mina.plano[i].size(); ++j){
 			cout << mina.plano[i][j];
@@ -157,7 +150,6 @@ void dibujar1_1(tMina const& mina) {
 }
 
 void dibujar3_1(tMina const& mina) {
-	//^Imprime en resolución 3:1
 	size_t ratio = 3;
 	for (size_t i = 0; i < mina.plano.size(); ++i){
 		for (size_t r1 = 0; r1 < ratio; ++r1){
@@ -172,7 +164,6 @@ void dibujar3_1(tMina const& mina) {
 }
 
 bool dentroPlano(tMina const& mina, int x, int y) {
-	//^Comprueba que la posición (x,y) está en el plano
 	return x < mina.plano.size() &&
 		y < mina.plano[0].size() &&
 		x >= 0 &&
@@ -180,6 +171,5 @@ bool dentroPlano(tMina const& mina, int x, int y) {
 }
 
 bool esElemQueCae(tElemento &elem) {
-	//^Comprueba si elem es un elemenento que deba caer
 	return (elem == PIEDRA || elem == GEMA);
 }

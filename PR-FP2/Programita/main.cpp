@@ -11,7 +11,6 @@ const int ULTIMO_NIVEL = 5;
 const string ARCHIVO_MARCADOR = "puntuaciones.txt";
 
 void escogerResolucion(tJuego & juego, ostream& flujoSalida = cout, istream& flujoEntrada = cin) {
-	//^Menú para escoger la resolución
     flujoSalida << "Escoge la resolución del juego\n";
     flujoSalida << "1. Jugar partida a escala 1:1\n";
     flujoSalida << "2. Jugar partida a escala 3:1\n";
@@ -24,7 +23,6 @@ void escogerResolucion(tJuego & juego, ostream& flujoSalida = cout, istream& flu
 }
 
 void escogerDispEntrada(tJuego & juego, ostream& flujoSalida = cout, istream& flujoEntrada = cin) {
-	//^Menú para escoger el dispositivo de entrada
     flujoSalida << "Escoge el dispositivo de entrada\n";
     flujoSalida << "1. Usar teclado\n";
     flujoSalida << "2. Usar un fichero\n";
@@ -44,7 +42,6 @@ void escogerDispEntrada(tJuego & juego, ostream& flujoSalida = cout, istream& fl
     }
 }
 string get_name_dialog(tPuntuaciones & marcador, int & pos, int tabSize = 0) {
-	//^Menú para coger el nombre del jugador. Lo coloca en `pos` en el marcador
 	int tab = (tabSize? tabSize : DEFAULT_TAB_SIZE);
 	string nombre;
 	cout << "Introduce tu nombre de jugador/a: ";
@@ -67,7 +64,6 @@ string get_name_dialog(tPuntuaciones & marcador, int & pos, int tabSize = 0) {
 }
 
 int get_level(string nombre, tColor colorTexto = AMARILLO) {
-	//^Menú para pedirle el nivel al jugador
 	int res;
 	colorear(NEGRO, nombre, colorTexto);
 	cout << ", ¿Qué mina quieres explorar?.\n"
@@ -116,7 +112,6 @@ int main() {
 			// Se ha elegido la resolución del juego, y el dispositivo de entrada.
             int nivel = 0;
 			tPuntuaciones marcador; inicializar_marcador(marcador);
-
 			ifstream archivoMarcador; archivoMarcador.open(ARCHIVO_MARCADOR);
 			if(archivoMarcador.is_open()) {
 				cargar_marcador(archivoMarcador, marcador);
@@ -126,15 +121,16 @@ int main() {
 				colorear(AMARILLO, "[WARN]:");
 				Log(" No se encontró el archivo "+ARCHIVO_MARCADOR+" para cargar el marcador");
 			}
+			/*mostrar_datos_usuario(marcador);
+			mostrar_puntuaciones_alfabetico(marcador);*/
 
-			int pos = 0; // Posición donde se colocará el jugador
+			int pos = 0;
 			string username = get_name_dialog(marcador, pos);
 			nivel = get_level(username);
 
 			tPuntuacionJugador & jugador = marcador.arrayClasificacion[pos];
 
             while (nivel != 0) {
-				// Reseteamos los valores del juego
 				juego.numMovimientosMinero = 0;
 				juego.gemasRecogidas = 0;
 				juego.dinamitasUsadas = 0;
@@ -182,8 +178,6 @@ int main() {
 				mostrar_datos_usuario(marcador);
 				nivel = get_level(username);
             }
-			
-			// Guardamos los datos del marcador a la salida
 			ofstream archivoMarcadorGuardado; archivoMarcadorGuardado.open(ARCHIVO_MARCADOR);
 			if(archivoMarcadorGuardado.is_open()) {
 				guardar_marcador(archivoMarcadorGuardado, marcador);
@@ -192,10 +186,10 @@ int main() {
 			else {
 				colorear(ROJO, "[ERROR]:");
 				Log(" No se ha podido guardar el marcador\n");
-				systemPause();
+				systemClear();
 			}
 			destruir(marcador);
-			cout << "Gracias por jugar\n"; // Porque hay que ser educado
+			cout << "Gracias por jugar\n";
         }
 	}
 

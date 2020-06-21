@@ -2,23 +2,10 @@
 #include <string>
 #include "sprites.h"
 using namespace std;
-
-#ifdef __WIN32
-// Abstracción del método extraño de windows para cambiar la posción del cursor
-// Proporcionado por Cai (Uso Linux de todas formas...)
-void setCursorPosition(int x, int y) {
-	/* Configurar la posición del cursor en la consola (sirve para evitar parpadeo de pantalla por cls)
-	Source: https://stackoverflow.com/questions/34842526/update-console-without-flickering-c */
-
-	static const HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
-	cout.flush();
-	COORD coord = { (SHORT)x, (SHORT)y };
-	SetConsoleCursorPosition(hOut, coord);
-}
-#endif
+const vector<int> ctr = { 30,34,32,36,31,35,33,37,90 };
+const tTheme ThemeName = THEME_DEFAULT;
 
 void systemClear(bool partial) {
-	//^Clear para Windows, Linux y MacOS. Acepta limpieza parcial o total
 #ifdef _WIN32
 	if(partial) {
 		setCursorPosition(0, 0);
@@ -27,7 +14,6 @@ void systemClear(bool partial) {
 	else system("cls");
 #else
 	if(partial) {
-		// Ver `man console_codes`
 		cout << "\e[0;0H" << endl;
 	}
 	else system("clear");
@@ -35,7 +21,6 @@ void systemClear(bool partial) {
 }
 
 void systemPause() {
-	//^Pausa dependiendo del OS
 #ifdef _WIN32
 	system("pause");
 #elif __linux__
@@ -48,7 +33,6 @@ void systemPause() {
 }
 
 tColor theme(char opt, tElemento elem) {
-	//^Devuelve el color de texto o fondo (según opt), segun el tema elegido
 	tColor res;
 
 	switch(ThemeName) {
@@ -91,7 +75,6 @@ tColor theme(char opt, tElemento elem) {
 }
 
 void printTitleScreen(tColor colorFondo, tColor colorTexto) {
-	//^Pues eso
 	systemClear();
     colorear(colorFondo, "                                                                                                 \n", colorTexto);
     colorear(colorFondo, " ███╗   ███╗ █████╗ ███████╗████████╗███████╗██████╗     ███╗   ███╗██╗███╗   ██╗███████╗██████╗ \n", colorTexto);
@@ -103,7 +86,6 @@ void printTitleScreen(tColor colorFondo, tColor colorTexto) {
 }
 
 void printGameOver(tColor colorFondo, tColor colorTexto) {
-	//^Pues eso
 	systemClear();
     colorear(colorFondo, "                                     \n", colorTexto);
 	colorear(colorFondo, "   ▄████  ▄▄▄       ███▄ ▄███▓▓█████ \n", colorTexto);
@@ -130,7 +112,6 @@ void printGameOver(tColor colorFondo, tColor colorTexto) {
 }
 
 void printVictory(tColor colorFondo, tColor colorTexto) {
-	//^Pues eso
 	systemClear();
 	colorear(NEGRO, "                                                                                 \n", colorTexto);
 	colorear(NEGRO, "  ▄█    █▄   ▄█   ▄████████     ███      ▄██████▄     ▄████████  ▄█     ▄████████\n", colorTexto);
@@ -146,7 +127,6 @@ void printVictory(tColor colorFondo, tColor colorTexto) {
 }
 
 void sprite(tElemento elem, int section, tColor colorFondo, tColor colorTexto) {
-	//^Imprime el sprite de 3x3 del elemento dado, aunque solo el 1x3 especificado por section
     switch(elem) {
         case MINERO:
             if(section == 0) {
@@ -202,7 +182,6 @@ void sprite(tElemento elem, int section, tColor colorFondo, tColor colorTexto) {
 }
 
 void colorear(tColor colorFondo, string msg, tColor colorTexto) {
-	//^Imprime msg por consola con los colores de fondo y texto especificados
     #ifdef _WIN32
         HANDLE handle = GetStdHandle(STD_OUTPUT_HANDLE);
         SetConsoleTextAttribute(handle, int(colorTexto) | (int(colorFondo) << 4));
