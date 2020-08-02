@@ -17,18 +17,24 @@
 using namespace std;
 
 void Log(string const& msg){ 
+	//^Imrpime msg si la constante DEBUG está activada
 	if (DEBUG) cout << msg << '\n';
 }
 
-void explosion(tJuego& juego, int x, int y) { tPlano& plano = juego.mina.plano;
+void explosion(tJuego& juego, int x, int y) { 
+	//^Genera el efecto de la explosion de una dinamita en (x,y)
+	tPlano& plano = juego.mina.plano; // Para no escribir demasiado
+
+	// Recorre las 8 casilla al rededor de (x,y), más la propia (x,y)
 	for (int i = x-1; i <= x+1; i++) {
 		for (int j = y-1; j <= y+1; j++) {
 			if(dentroPlano(juego.mina, i, j)){
-				if(plano[i][j] == MINERO) juego.estado = EXPLOTADO;
+				if(plano[i][j] == MINERO) juego.estado = EXPLOTADO; // Desafortunada situación :(
 				plano[i][j] = LIBRE;
 			} 
 		}
 	}
+	// Si hay elementos que pueden caer, hacer que caigan
 	for (size_t j = y-1; j <= y+1; j++) {
 		if(dentroPlano(juego.mina, x-2, j)) avalancha(juego, x-2, j);
 	}
@@ -36,12 +42,14 @@ void explosion(tJuego& juego, int x, int y) { tPlano& plano = juego.mina.plano;
 }
 
 void lanzarDinamita(tJuego& juego) {
+	//^Accion del minero de lanzar una dinamita
 	juego.dinamitasUsadas++;
 	int& x = juego.mina.minero.x,
 		y = juego.mina.minero.y;
 	tPlano& plano = juego.mina.plano;
 	int tx; // target x
 	for (tx = x + 1; tx < plano.size() && plano[tx][y] == LIBRE; tx++) {
+		// Pequeña animación
 		tElemento tmp = plano[tx][y];
 		plano[tx][y] = DINAMITA;
 		dibujar(juego);
@@ -53,26 +61,35 @@ void lanzarDinamita(tJuego& juego) {
 }
 
 void moverMinero(tJuego& juego, int hasta_x, int hasta_y) {
+	//^Mueve al minero a (hasta_x, hasta_y). 
+	// No se encarga de saber si esto es posible
 	int& desde_x = juego.mina.minero.x,
 		 desde_y = juego.mina.minero.y;
 	tPlano& plano = juego.mina.plano;
+
+	// Actualizar posiciones en el plano
 	plano[hasta_x][hasta_y] = plano[desde_x][desde_y];
 	plano[desde_x][desde_y] = LIBRE;
+
+	// Actualizar la posición del minero
 	juego.mina.minero.x = hasta_x;
 	juego.mina.minero.y = hasta_y;
 }
 
 void queCaiga(tJuego & juego, int x, int y) {
-	// !! No se encarga de que (x,y) deba caer
+	//^Permite al elemento en (x,y) caer hasta donde pueda
+	// No se encarga de que el elemento (x,y) deba caer
 	tPlano& plano = juego.mina.plano;
 	if(dentroPlano(juego.mina, x+1, y) && plano[x+1][y] == LIBRE) {
-			int nx;
-			for(nx = x+1; nx < plano.size() && plano[nx][y] == LIBRE; ++nx) juego.mina.visitados[nx][y] = true;
-			swap(plano[x][y], plano[nx-1][y]);
+			int nx; // nx es la nueva altura donde ira el elemento
+			// Hallamos el final del hoyo
+			for(nx = x+1; nx < plano.size() && plano[nx][y] == LIBRE; ++nx) juego.mina.visitados[nx][y] = true; // visitados nos dice si ha habido movimiento en esa casilla o no
+			swap(plano[x][y], plano[nx-1][y]); // nx-1 pues queremos justo la posición anterior, la que sigue en el hoyo
 	}
 }
 
 void avalancha(tJuego & juego, int x, int y) {
+	//^Permite que caigan varios elementos seguidos, si están en una pila
 	int tx;
 	for(tx = x; tx >= 0 && esElemQueCae(juego.mina.plano[tx][y]); --tx) {
 		queCaiga(juego, tx, y);
@@ -80,12 +97,19 @@ void avalancha(tJuego & juego, int x, int y) {
 }
 
 void printStats(tJuego const& juego) {
+	//^Imprime las estadísticas del minero actuales
 	cout << "Movimientos: " << juego.numMovimientosMinero << '\n';
 	cout << "Gemas: " << juego.gemasRecogidas << '\n';
 	cout << "Dinamitas: " << juego.dinamitasUsadas << '\n';
+	if(DEBUG) {
+		cout << "Estado: " << (int) juego.estado << '\n';
+		cout << "Pos minero: " << juego.mina.minero.x << "-" << juego.mina.minero.y << '\n';
+	}
 }
 
 istream& operator>>(istream& movimientos, tTecla& tecla) {
+	//^Sobrecarga de >> para teclas
+	// Usado para leer de fichero
 	char input;
 	movimientos.get(input);
 	switch(input){
@@ -117,6 +141,8 @@ istream& operator>>(istream& movimientos, tTecla& tecla) {
 }
 
 tTecla leerTeclado() {
+	//^Lee las teclas pulsadas y las traduce a tTecla
+	// Funciona en Windows y Linux (MacOS pendiente de confirmación)
 	tTecla tecla = ERROR_TECLA;
 #ifdef _WIN32
 	int dir = _getch();
@@ -168,6 +194,7 @@ tTecla leerTeclado() {
 	Log(to_string(dir) + " ");
 	switch (dir) {
 	// Vim keybindings
+	// Se ponen separados para evitar tocar `specialKey`
 	case 104: 
 		tecla = IZDA;
 		break;
@@ -220,6 +247,7 @@ tTecla leerTeclado() {
 }
 
 void leerMovimiento(tJuego & juego, tTecla & tecla, istream & movimientos) {
+	//^Lee el movimiento según el dispositivo de entrada, y trata la tecla de salida
 	if(juego.dispositivoDeEntrada == 1)
 		tecla = leerTeclado();
 	else if(juego.dispositivoDeEntrada == 2)
@@ -230,7 +258,8 @@ void leerMovimiento(tJuego & juego, tTecla & tecla, istream & movimientos) {
 }
 
 void dibujar(tJuego const& juego) {
-	systemClear(true);
+	//^Dibuja el tablero en pantalla
+	systemClear(true); // Con true como parámetro, la limpieza de la consola es parcial (Solo mueve el cursor, sobreescribe), lo que evita parpadeos
 	printStats(juego);
 	switch(juego.resolucion) {
 		case 1:
@@ -242,13 +271,15 @@ void dibujar(tJuego const& juego) {
 		default:
 			Log("No se acepta la resolución " + to_string(juego.resolucion) + "\n");
 	}
-	if(juego.estado == EXITO) cout << "Mina recorrida\n";
-	else if(juego.estado == EXPLOTADO) cout << "Le alcanzo la dinamita\n";
-	else if (juego.estado == ABANDONO) cout << "Pide rescate\n";
-	else cout << '\n';
+	if(juego.estado == EXITO) cout << "Mina recorrida";
+	else if(juego.estado == EXPLOTADO) cout << "Le alcanzo la dinamita";
+	else if (juego.estado == ABANDONO) cout << "Pide rescate";
+	cout << '\n';
 }
 
 void realizarMovimiento(tJuego& juego, tTecla& tecla) {
+	//^Realiza el movimiento en tTecla en el juego especificado y dibuja el plano resultante
+
 	juego.numMovimientosMinero++;
 	tPlano& plano = juego.mina.plano;
 	int x = juego.mina.minero.x,
@@ -260,6 +291,7 @@ void realizarMovimiento(tJuego& juego, tTecla& tecla) {
 	bool hazMovim = false;
 	if(int(tecla) < 4) {
 		if(dentroPlano(juego.mina, nx, ny)) {
+			// El switch comprueba si se puede hacer un movimiento, y lo prepara para ello
 			switch(plano[nx][ny]) {
 				case MURO:
 					Log("Te chocaste contra un muro");
@@ -312,7 +344,7 @@ void realizarMovimiento(tJuego& juego, tTecla& tecla) {
 
 void jugar(tJuego & juego, istream & entrada, istream & movimientos) {
 	cargar_mina(entrada, juego.mina);
-	dibujar(juego);
+	dibujar(juego); // Imprime el mapa inicial
 	tTecla input;
 	do{
 		leerMovimiento(juego, input, movimientos);
@@ -320,7 +352,7 @@ void jugar(tJuego & juego, istream & entrada, istream & movimientos) {
 			realizarMovimiento(juego, input);
 		} 
 	} while(input != FIN && juego.estado == EXPLORANDO);
-	dibujar(juego);
+	dibujar(juego); // Esto debería poder quitarse
 	/*
 	if(juego.dispositivoDeEntrada = 2) 
 		while(input != FIN) leerMovimiento(juego, input, movimientos); // Agotar movimientos no usados

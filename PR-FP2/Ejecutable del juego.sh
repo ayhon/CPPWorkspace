@@ -1,13 +1,16 @@
 #!/bin/bash
-
 EXECUTABLE="masterminer"
 DIR="$(pwd)"
-if [ -e "$EXECUTABLE" ]; then
-	g++ -g -o masterminer *.cpp
-fi
 
 case $OSTYPE in
+	darwin) COMPILER="clang++ -std=c++14";;
+	linux-gnu) COMPILER="g++";;
+	*) COMPILER="clang++ -std=c++14";;
+esac
 
+[ -e "$EXECUTABLE" ] || $COMPILER -o masterminer *.cpp
+
+case $OSTYPE in
 	darwin)
 	open -a Terminal "$DIR/$EXECUTABLE";;
 
@@ -17,4 +20,3 @@ case $OSTYPE in
 	*)
 	open -a Terminal "$DIR/$EXECUTABLE";;
 esac
-

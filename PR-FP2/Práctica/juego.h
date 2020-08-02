@@ -10,7 +10,7 @@ using namespace std;
 #ifdef DOMJUDGE
 const bool DEBUG = false;
 #else
-const bool DEBUG = true;
+const bool DEBUG = false;
 #endif
 
 enum tTecla { ARRIBA, ABAJO, DCHA, IZDA, SALIR, FIN, TNT, NADA, ERROR_TECLA };
