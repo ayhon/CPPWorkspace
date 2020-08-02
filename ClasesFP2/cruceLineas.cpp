@@ -67,6 +67,7 @@ pi rec(vi const& v, vi const& w, int ini, int fin)  {
 }
 */
 
+// TODO: Se podría haber hecho con el vector resta, comprobando el signo
 pi res(vi const& v, vi const& w, int ini, int fin)  {
 	int mid = ini + (fin-ini)/2;
 	if(fin - ini <= 1) {
